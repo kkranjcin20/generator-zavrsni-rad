@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 
 namespace generator_zavrsni_rad.Generator_BLL
@@ -95,25 +92,26 @@ namespace generator_zavrsni_rad.Generator_BLL
 
         public bool GenerateClass()
         {
-            string filePath = Path.Combine("C:\\Users\\Korisnik\\source\\repos\\generator_zavrsni_rad\\generator_zavrsni_rad", tableMetadata.TableName + ".cs");
+            string projectDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\.."));
+
+            string filePath = projectDirectory + "/" + tableMetadata.TableName + ".cs";
+
+            string solutionName = Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
+            if (solutionName.EndsWith("exe"))
+            {
+                solutionName = Path.ChangeExtension(solutionName, null);
+            }
+
+            string projectPath = Path.Combine(projectDirectory, $"{solutionName}.csproj");
 
             if (!File.Exists(filePath))
             {
-                //FrmGenerating frmGenerating = new FrmGenerating();
-                //frmGenerating.ShowDialog();
-
                 UsingDirectiveSyntax generatedUsingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
-
-                // Define a namespace for the generated code
-                NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName("generator_zavrsni_rad"));
-
-                // Define a class for the generated code
+                NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName($"{solutionName}"));
                 ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(tableMetadata.TableName);
 
-                // Add properties to the generated class based on the table metadata
                 foreach (var column in tableMetadata.Columns)
                 {
-                    // Create a property for the column
                     PropertyDeclarationSyntax property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(column.DataType), column.ColumnName)
                         .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
                         .WithAccessorList(SyntaxFactory.AccessorList(
@@ -125,17 +123,13 @@ namespace generator_zavrsni_rad.Generator_BLL
                         .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
                             })));
 
-                    // Add the property to the generated class
                     generatedClass = generatedClass.AddMembers(property);
                 }
 
-                // Add the generated class to the generated namespace
                 generatedNamespace = generatedNamespace.AddMembers(generatedClass);
 
-                // Create a compilation unit and add the generated namespace
                 var compilationUnit = SyntaxFactory.CompilationUnit().AddUsings(generatedUsingDirective).AddMembers(generatedNamespace);
 
-                // Generate the C# code
                 string generatedCode = compilationUnit.NormalizeWhitespace().ToFullString();
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -146,12 +140,10 @@ namespace generator_zavrsni_rad.Generator_BLL
                     }
                 }
 
-                string projectPath = Path.Combine("C:\\Users\\Korisnik\\source\\repos\\generator_zavrsni_rad\\generator_zavrsni_rad", "generator_zavrsni_rad.csproj");
                 Project project = new Project(projectPath);
                 project.AddItem("Compile", filePath);
                 project.Save();
 
-                // Open the file with Notepad
                 System.Diagnostics.Process.Start("notepad.exe", filePath);
 
                 return true;

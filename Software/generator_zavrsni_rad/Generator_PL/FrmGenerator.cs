@@ -1,18 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.CodeAnalysis;
+﻿using System;
 using System.IO;
-using Microsoft.Build.Evaluation;
+using System.Linq;
+using System.Windows.Forms;
 using generator_zavrsni_rad.Generator_BLL;
 
 namespace generator_zavrsni_rad
