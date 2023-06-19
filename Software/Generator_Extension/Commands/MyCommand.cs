@@ -1,4 +1,5 @@
 ﻿using generator_zavrsni_rad;
+using generator_zavrsni_rad.Generator_PL;
 
 namespace Generator_Extension
 {
@@ -7,8 +8,8 @@ namespace Generator_Extension
     {
         protected override async Task ExecuteAsync(OleMenuCmdEventArgs e)
         {
-            FrmGenerator frmGenerator = new FrmGenerator();
-            frmGenerator.ShowDialog();
+            FrmDatabase frmDatabase = new FrmDatabase();
+            frmDatabase.ShowDialog();
         }
     }
 }

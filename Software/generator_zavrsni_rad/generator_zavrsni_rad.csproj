@@ -84,7 +84,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="C:\Users\Korisnik\source\repos\generator_zavrsni_rad\generator_zavrsni_rad\MobilePhones.cs" />
     <Compile Include="Generator_PL\FrmDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
