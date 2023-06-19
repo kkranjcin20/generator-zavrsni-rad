@@ -84,12 +84,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="C:\Users\Korisnik\source\repos\generator_zavrsni_rad\generator_zavrsni_rad\MobilePhones.cs" />
+    <Compile Include="C:\Users\Korisnik\Source\Repos\generator-zavrsni-rad\Software\generator_zavrsni_rad/MobilePhones.cs" />
+    <Compile Include="C:\Users\Korisnik\Source\Repos\generator-zavrsni-rad\Software\generator_zavrsni_rad/TestTable1.cs" />
     <Compile Include="Generator_PL\FrmDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Generator_PL\FrmDatabase.Designer.cs">
       <DependentUpon>FrmDatabase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generator_PL\FrmDestinationFolder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Generator_PL\FrmDestinationFolder.Designer.cs">
+      <DependentUpon>FrmDestinationFolder.cs</DependentUpon>
     </Compile>
     <Compile Include="Generator_PL\FrmGenerator.cs">
       <SubType>Form</SubType>
@@ -103,6 +110,9 @@
     <Compile Include="TableMetadata.cs" />
     <EmbeddedResource Include="Generator_PL\FrmDatabase.resx">
       <DependentUpon>FrmDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Generator_PL\FrmDestinationFolder.resx">
+      <DependentUpon>FrmDestinationFolder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Generator_PL\FrmGenerator.resx">
       <DependentUpon>FrmGenerator.cs</DependentUpon>

@@ -1,8 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Security;
+using System.Security.AccessControl;
+using System.Security.Permissions;
+using System.Security.Principal;
 using System.Windows.Forms;
 using generator_zavrsni_rad.Generator_BLL;
+using generator_zavrsni_rad.Generator_PL;
+using static System.Net.WebRequestMethods;
 
 namespace generator_zavrsni_rad
 {
@@ -10,10 +16,14 @@ namespace generator_zavrsni_rad
     {
         Generator generator = new Generator();
         private TableMetadata _table;
+        public string chosenPath;
         public FrmGenerator(TableMetadata table)
         {
             InitializeComponent();
             _table = table;
+        }
+        public FrmGenerator()
+        {
         }
         private void FrmGenerator_Load(object sender, EventArgs e)
         {
@@ -29,9 +39,16 @@ namespace generator_zavrsni_rad
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
-            if (!generator.GenerateClass())
+            var frmDestinationFolder = new FrmDestinationFolder();
+            //frmDestinationFolder.FormClosed += (s, args) => GenerateToFolder();
+            frmDestinationFolder.ShowDialog();
+        }
+
+        private void GenerateToFolder()
+        {
+            if (chosenPath != null || chosenPath != "")
             {
-                MessageBox.Show("Class is already generated!");
+                generator.GenerateClass(chosenPath);
             }
         }
     }
