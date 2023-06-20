@@ -16,7 +16,7 @@ namespace generator_zavrsni_rad
     {
         Generator generator = new Generator();
         private TableMetadata _table;
-        public string chosenPath;
+        
         public FrmGenerator(TableMetadata table)
         {
             InitializeComponent();
@@ -40,16 +40,19 @@ namespace generator_zavrsni_rad
         private void btnGenerate_Click(object sender, EventArgs e)
         {
             var frmDestinationFolder = new FrmDestinationFolder();
-            //frmDestinationFolder.FormClosed += (s, args) => GenerateToFolder();
+            frmDestinationFolder.FormClosed += (s, args) =>
+            {
+                if (generator.GenerateClass())
+                {
+                    NotifyUser();
+                }
+            };
             frmDestinationFolder.ShowDialog();
         }
 
-        private void GenerateToFolder()
+        private void NotifyUser()
         {
-            if (chosenPath != null || chosenPath != "")
-            {
-                generator.GenerateClass(chosenPath);
-            }
+            MessageBox.Show("Class was successfully generated! \nYou will have to reload the project to see them in the Solution Explorer.", "Generated class", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

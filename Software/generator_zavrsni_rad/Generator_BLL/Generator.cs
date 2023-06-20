@@ -13,6 +13,7 @@ namespace generator_zavrsni_rad.Generator_BLL
     public class Generator
     {
         TableMetadata tableMetadata = new TableMetadata();
+        public static string chosenPath;
 
         public List<TableMetadata> FetchTables()
         {
@@ -91,11 +92,13 @@ namespace generator_zavrsni_rad.Generator_BLL
             return tableMetadata;
         }
 
-        public void GenerateClass(string filePath)
+        public bool GenerateClass()
         {
             string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\.."));
 
-            //string filePath = projectDirectory + "/" + tableMetadata.TableName + ".cs";
+
+
+            string filePath = chosenPath + "\\" + tableMetadata.TableName + ".cs";
 
             string solutionName = Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
             if (solutionName.EndsWith("exe"))
@@ -103,7 +106,7 @@ namespace generator_zavrsni_rad.Generator_BLL
                 solutionName = Path.ChangeExtension(solutionName, null);
             }
 
-            string projectPath = Path.Combine(projectDir, $"{solutionName}.csproj");
+            string projectFilePath = Path.Combine(projectDir, $"{solutionName}.csproj");
 
             if (!File.Exists(filePath))
             {
@@ -146,18 +149,26 @@ namespace generator_zavrsni_rad.Generator_BLL
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error creating file: " + ex.Message, "File Creation", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    return false;
                 }
 
-                Project project = new Project(projectPath);
-                project.AddItem("Compile", filePath);
+                string relativePath = filePath.Substring(projectDir.Length + 1);
+
+                Project project = new Project(projectFilePath);
+                //project.AddItem("Compile", "$(ProjectDir)" + relativePath);
+                //project.AddItem("Compile", relativePath + tableMetadata.TableName);
+                project.AddItem("Compile", relativePath);
                 project.Save();
+                //project.Build();
+
+                return true;
 
                 //System.Diagnostics.Process.Start("notepad.exe", filePath);
             }
             else
             {
                 MessageBox.Show("Class is already generated!");
+                return false;
             }
         }
     }
