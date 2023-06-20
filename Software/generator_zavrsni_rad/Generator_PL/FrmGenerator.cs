@@ -1,14 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Security;
-using System.Security.AccessControl;
-using System.Security.Permissions;
-using System.Security.Principal;
 using System.Windows.Forms;
 using generator_zavrsni_rad.Generator_BLL;
 using generator_zavrsni_rad.Generator_PL;
-using static System.Net.WebRequestMethods;
 
 namespace generator_zavrsni_rad
 {

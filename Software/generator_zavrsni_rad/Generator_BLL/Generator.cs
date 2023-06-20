@@ -96,8 +96,6 @@ namespace generator_zavrsni_rad.Generator_BLL
         {
             string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\.."));
 
-
-
             string filePath = chosenPath + "\\" + tableMetadata.TableName + ".cs";
 
             string solutionName = Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
@@ -155,15 +153,10 @@ namespace generator_zavrsni_rad.Generator_BLL
                 string relativePath = filePath.Substring(projectDir.Length + 1);
 
                 Project project = new Project(projectFilePath);
-                //project.AddItem("Compile", "$(ProjectDir)" + relativePath);
-                //project.AddItem("Compile", relativePath + tableMetadata.TableName);
                 project.AddItem("Compile", relativePath);
                 project.Save();
-                //project.Build();
 
                 return true;
-
-                //System.Diagnostics.Process.Start("notepad.exe", filePath);
             }
             else
             {

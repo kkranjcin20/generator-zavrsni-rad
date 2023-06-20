@@ -84,7 +84,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Generator_BLL\TestTable1.cs" />
     <Compile Include="Generator_PL\FrmDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
