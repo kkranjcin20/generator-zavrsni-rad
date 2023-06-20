@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using generator_zavrsni_rad.Generator_BLL;
+using generator_zavrsni_rad.Generator_PL;
 
 namespace generator_zavrsni_rad
 {
@@ -10,10 +10,14 @@ namespace generator_zavrsni_rad
     {
         Generator generator = new Generator();
         private TableMetadata _table;
+        
         public FrmGenerator(TableMetadata table)
         {
             InitializeComponent();
             _table = table;
+        }
+        public FrmGenerator()
+        {
         }
         private void FrmGenerator_Load(object sender, EventArgs e)
         {
@@ -29,10 +33,20 @@ namespace generator_zavrsni_rad
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
-            if (!generator.GenerateClass())
+            var frmDestinationFolder = new FrmDestinationFolder();
+            frmDestinationFolder.FormClosed += (s, args) =>
             {
-                MessageBox.Show("Class is already generated!");
-            }
+                if (generator.GenerateClass())
+                {
+                    NotifyUser();
+                }
+            };
+            frmDestinationFolder.ShowDialog();
+        }
+
+        private void NotifyUser()
+        {
+            MessageBox.Show("Class was successfully generated! \nYou will have to reload the project to see them in the Solution Explorer.", "Generated class", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

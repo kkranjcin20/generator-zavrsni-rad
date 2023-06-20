@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using Microsoft.CodeAnalysis;
+using System.Windows.Forms;
 
 namespace generator_zavrsni_rad.Generator_BLL
 {
     public class Generator
     {
         TableMetadata tableMetadata = new TableMetadata();
+        public static string chosenPath;
 
         public List<TableMetadata> FetchTables()
         {
@@ -92,9 +94,9 @@ namespace generator_zavrsni_rad.Generator_BLL
 
         public bool GenerateClass()
         {
-            string projectDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\.."));
+            string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\.."));
 
-            string filePath = projectDirectory + "/" + tableMetadata.TableName + ".cs";
+            string filePath = chosenPath + "\\" + tableMetadata.TableName + ".cs";
 
             string solutionName = Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
             if (solutionName.EndsWith("exe"))
@@ -102,7 +104,7 @@ namespace generator_zavrsni_rad.Generator_BLL
                 solutionName = Path.ChangeExtension(solutionName, null);
             }
 
-            string projectPath = Path.Combine(projectDirectory, $"{solutionName}.csproj");
+            string projectFilePath = Path.Combine(projectDir, $"{solutionName}.csproj");
 
             if (!File.Exists(filePath))
             {
@@ -132,24 +134,33 @@ namespace generator_zavrsni_rad.Generator_BLL
 
                 string generatedCode = compilationUnit.NormalizeWhitespace().ToFullString();
 
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                try
                 {
-                    using (var streamWriter = new StreamWriter(fileStream))
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        streamWriter.Write(generatedCode);
+                        using (var streamWriter = new StreamWriter(fileStream))
+                        {
+                            streamWriter.Write(generatedCode);
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error creating file: " + ex.Message, "File Creation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
 
-                Project project = new Project(projectPath);
-                project.AddItem("Compile", "$(ProjectDir)" + tableMetadata.TableName + ".cs");
+                string relativePath = filePath.Substring(projectDir.Length + 1);
+
+                Project project = new Project(projectFilePath);
+                project.AddItem("Compile", relativePath);
                 project.Save();
-
-                //System.Diagnostics.Process.Start("notepad.exe", filePath);
 
                 return true;
             }
             else
             {
+                MessageBox.Show("Class is already generated!");
                 return false;
             }
         }
