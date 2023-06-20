@@ -141,10 +141,10 @@ namespace generator_zavrsni_rad.Generator_BLL
                 }
 
                 Project project = new Project(projectPath);
-                project.AddItem("Compile", filePath);
+                project.AddItem("Compile", "$(ProjectDir)" + tableMetadata.TableName + ".cs");
                 project.Save();
 
-                System.Diagnostics.Process.Start("notepad.exe", filePath);
+                //System.Diagnostics.Process.Start("notepad.exe", filePath);
 
                 return true;
             }

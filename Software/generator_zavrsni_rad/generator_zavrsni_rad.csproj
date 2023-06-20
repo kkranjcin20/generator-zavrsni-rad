@@ -85,7 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(ProjectDir)MobilePhones.cs" />
-    <Compile Include="C:\Users\Korisnik\source\repos\generator-zavrsni-rad\Software\generator_zavrsni_rad/TestTable1.cs" />
+    <Compile Include="$(ProjectDir)TestTable1.cs" />
     <Compile Include="Generator_PL\FrmDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
