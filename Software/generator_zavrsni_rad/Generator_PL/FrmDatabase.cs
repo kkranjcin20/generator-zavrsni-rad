@@ -1,5 +1,6 @@
 ﻿using generator_zavrsni_rad.Generator_BLL;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace generator_zavrsni_rad.Generator_PL
@@ -28,6 +29,15 @@ namespace generator_zavrsni_rad.Generator_PL
                 var selectedTable = dgvTables.CurrentRow.DataBoundItem as TableMetadata;
                 FrmGenerator frmGenerator = new FrmGenerator(selectedTable);
                 frmGenerator.ShowDialog();
+            }
+            else if (dgvTables.SelectedRows.Count > 1)
+            {
+                foreach (DataGridViewRow row in dgvTables.SelectedRows)
+                {
+                    var selectedTable = row.DataBoundItem as TableMetadata;
+                    FrmGenerator frmGenerator = new FrmGenerator(selectedTable);
+                    frmGenerator.ShowDialog();
+                }
             }
             else
             {

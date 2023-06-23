@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using generator_zavrsni_rad.Generator_BLL;
@@ -16,9 +17,7 @@ namespace generator_zavrsni_rad
             InitializeComponent();
             _table = table;
         }
-        public FrmGenerator()
-        {
-        }
+
         private void FrmGenerator_Load(object sender, EventArgs e)
         {
             _table = generator.FetchTableMetadata(_table.TableName);

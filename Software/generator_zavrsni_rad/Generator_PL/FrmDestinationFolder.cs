@@ -1,6 +1,7 @@
 ﻿using generator_zavrsni_rad.Generator_BLL;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace generator_zavrsni_rad.Generator_PL
@@ -8,7 +9,8 @@ namespace generator_zavrsni_rad.Generator_PL
     public partial class FrmDestinationFolder : Form
     {
         FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-        private string _projectDir;
+        private string _userProfile;
+        private string _reposDirectory;
 
         public FrmDestinationFolder()
         {
@@ -17,14 +19,29 @@ namespace generator_zavrsni_rad.Generator_PL
 
         private void FrmDestinationFolder_Load(object sender, EventArgs e)
         {
-            _projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\.."));
-            txtPath.Text = _projectDir;
+            Close();
+            _userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile); ;
+            _reposDirectory = Path.Combine(_userProfile, "source", "repos");
+            txtPath.Text = _reposDirectory;
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            folderBrowserDialog.SelectedPath = _projectDir;
+            folderBrowserDialog.SelectedPath = _reposDirectory;
 
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => ShowFolderBrowserDialog()));
+            }
+            else
+            {
+                ShowFolderBrowserDialog();
+            }
+
+        }
+
+        private void ShowFolderBrowserDialog()
+        {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 txtPath.Text = folderBrowserDialog.SelectedPath.ToString();

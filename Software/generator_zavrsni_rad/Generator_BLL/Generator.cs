@@ -96,6 +96,11 @@ namespace generator_zavrsni_rad.Generator_BLL
         {
             string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\.."));
 
+            string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile); ;
+            string reposDirectory = Path.Combine(userProfile, "source", "repos", "generator-zavrsni-rad", "Software", "generator_zavrsni_rad");
+
+            chosenPath = reposDirectory;
+
             string filePath = chosenPath + "\\" + tableMetadata.TableName + ".cs";
 
             string solutionName = Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
@@ -141,6 +146,7 @@ namespace generator_zavrsni_rad.Generator_BLL
                         using (var streamWriter = new StreamWriter(fileStream))
                         {
                             streamWriter.Write(generatedCode);
+                            // File.WriteAllText(filePath, "Hello, World!");
                         }
                     }
                 }
