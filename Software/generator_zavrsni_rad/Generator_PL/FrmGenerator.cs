@@ -36,9 +36,12 @@ namespace generator_zavrsni_rad
             var frmDestinationFolder = new FrmDestinationFolder();
             frmDestinationFolder.FormClosed += (s, args) =>
             {
-                if (generator.GenerateClass())
+                if (!FrmDestinationFolder.isCancel)
                 {
-                    NotifyUser();
+                    if (generator.GenerateClass())
+                    {
+                        NotifyUser();
+                    }
                 }
             };
             frmDestinationFolder.ShowDialog();

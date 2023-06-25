@@ -136,6 +136,7 @@ namespace generator_zavrsni_rad.Generator_BLL
 
                 try
                 {
+
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         using (var streamWriter = new StreamWriter(fileStream))
@@ -143,6 +144,15 @@ namespace generator_zavrsni_rad.Generator_BLL
                             streamWriter.Write(generatedCode);
                         }
                     }
+
+                    /*
+                    File.WriteAllText(filePath, generatedCode);
+
+                    // https://www.stevejgordon.co.uk/getting-started-with-the-roslyn-apis-writing-code-with-code
+                    await using var streamWriter = new StreamWriter(@"c:\code-gen\generated.cs", false);
+                    ns.NormalizeWhitespace().WriteTo(streamWriter);
+
+                    */
                 }
                 catch (Exception ex)
                 {
@@ -150,7 +160,15 @@ namespace generator_zavrsni_rad.Generator_BLL
                     return false;
                 }
 
-                string relativePath = filePath.Substring(projectDir.Length + 1);
+                string relativePath;
+                if (projectDir.Length+1 > filePath.Length)
+                {
+                    relativePath = filePath.Substring(projectDir.Length + 1);
+                }
+                else
+                {
+                    relativePath= filePath;
+                }
 
                 Project project = new Project(projectFilePath);
                 project.AddItem("Compile", relativePath);

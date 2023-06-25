@@ -103,10 +103,10 @@
       <DependentUpon>FrmGenerator.cs</DependentUpon>
     </Compile>
     <Compile Include="Generator_BLL\Generator.cs" />
-    <Compile Include="MobilePhones.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableMetadata.cs" />
+    <Compile Include="TestTable1.cs" />
     <EmbeddedResource Include="Generator_PL\FrmDatabase.resx">
       <DependentUpon>FrmDatabase.cs</DependentUpon>
     </EmbeddedResource>
