@@ -9,7 +9,7 @@ namespace generator_zavrsni_rad.Generator_PL
     {
         FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
         private string _projectDir;
-        public static bool isCancel;
+        public static bool isCancelled;
 
         public FrmDestinationFolder()
         {
@@ -20,7 +20,7 @@ namespace generator_zavrsni_rad.Generator_PL
         {
             _projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\.."));
             txtPath.Text = _projectDir;
-            isCancel = true;
+            isCancelled = true;
         }
 
         private void btnBrowse_Click(object sender, EventArgs e)
@@ -37,13 +37,13 @@ namespace generator_zavrsni_rad.Generator_PL
         private void btnChoose_Click(object sender, EventArgs e)
         {
             Generator.chosenPath = txtPath.Text.ToString();
-            isCancel = false;
+            isCancelled = false;
             Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            isCancel = true;
+            isCancelled = true;
             Close();
         }
     }

@@ -144,15 +144,6 @@ namespace generator_zavrsni_rad.Generator_BLL
                             streamWriter.Write(generatedCode);
                         }
                     }
-
-                    /*
-                    File.WriteAllText(filePath, generatedCode);
-
-                    // https://www.stevejgordon.co.uk/getting-started-with-the-roslyn-apis-writing-code-with-code
-                    await using var streamWriter = new StreamWriter(@"c:\code-gen\generated.cs", false);
-                    ns.NormalizeWhitespace().WriteTo(streamWriter);
-
-                    */
                 }
                 catch (Exception ex)
                 {
