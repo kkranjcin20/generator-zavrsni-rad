@@ -136,7 +136,6 @@ namespace generator_zavrsni_rad.Generator_BLL
 
                 try
                 {
-
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
                         using (var streamWriter = new StreamWriter(fileStream))

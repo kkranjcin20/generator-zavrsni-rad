@@ -11,7 +11,7 @@ namespace Generator_Extension
         public const string Name = "Generate C# Classes from Database";
         public const string Description = @"Extension for generating C# classes from database tables.";
         public const string Language = "en-US";
-        public const string Version = "1.0";
+        public const string Version = "1.2";
         public const string Author = "Karlo Kranjčina";
         public const string Tags = "";
     }
