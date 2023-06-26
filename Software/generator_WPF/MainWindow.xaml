@@ -5,34 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:generator_WPF"
         mc:Ignorable="d"
-        Title="Generator" Height="440" Width="650" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="Generator" Height="320" Width="650" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
-        <Label Content="Enter class data manually" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"></Label>
-        <Label Content="Class name: " HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"></Label>
-        <TextBox x:Name="txtClassName" HorizontalAlignment="Left" Margin="128,45,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="22"></TextBox>
-        <Label Content="Property name: " HorizontalAlignment="Left" Margin="10,74,0,0" VerticalAlignment="Top"></Label>
-        <TextBox x:Name="txtPropertyName" HorizontalAlignment="Left" Margin="128,77,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="22"></TextBox>
-        <Label Content="Data Type: " HorizontalAlignment="Left" Margin="366,42,0,0" VerticalAlignment="Top"></Label>
-        <ComboBox x:Name="cmbDataType" HorizontalAlignment="Left" Margin="470,45,0,0" VerticalAlignment="Top" Width="140" Height="22"></ComboBox>
-        <Label Content="Access Modifier: " HorizontalAlignment="Left" Margin="366,74,0,0" VerticalAlignment="Top"></Label>
-        <ComboBox x:Name="cmbAccessModifier" HorizontalAlignment="Left" Margin="470,77,0,0" VerticalAlignment="Top" Width="140" Height="22"></ComboBox>
-        <Label Content="# of Added Properties: " HorizontalAlignment="Left" Margin="230,113,0,0" VerticalAlignment="Top"></Label>
-        <TextBox x:Name="txtAddedProperties" HorizontalAlignment="Left" Margin="368,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="20" IsEnabled="False"></TextBox>
-        <Button x:Name="btnAddProperty" Content="Add Column"  HorizontalAlignment="Left" Margin="434,116,0,0" VerticalAlignment="Top" Click="btnAddProperty_Click" Width="80"></Button>
-        <Button x:Name="btnAddClass" Content="Add Class"  HorizontalAlignment="Left" Margin="540,116,0,0" VerticalAlignment="Top" Width="70" Click="btnAddClass_Click"></Button>
+        <Label Content="Enter class data manually or choose JSON file" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"></Label>
+        <Button x:Name="btnChooseFile" Content="Choose file"  HorizontalAlignment="Left" Margin="16,42,0,0" VerticalAlignment="Top" Click="btnChooseFile_Click" Width="69"></Button>
 
-        <Label Content="Enter class data via JSON file" HorizontalAlignment="Left" Margin="10,217,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"></Label>
-        <Button x:Name="btnChooseFile" Content="Choose file"  HorizontalAlignment="Left" Margin="16,251,0,0" VerticalAlignment="Top" Click="btnChooseFile_Click"></Button>
-        <Label Content="Class name: " HorizontalAlignment="Left" Margin="10,291,0,0" VerticalAlignment="Top"></Label>
-        <TextBox x:Name="txtClassNameFromFile" HorizontalAlignment="Left" Margin="128,294,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="22"></TextBox>
-        <Label Content="Property name: " HorizontalAlignment="Left" Margin="10,322,0,0" VerticalAlignment="Top"></Label>
-        <TextBox x:Name="txtPropertyNameFromFile" HorizontalAlignment="Left" Margin="128,325,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="22"></TextBox>
-        <Label Content="Data Type: " HorizontalAlignment="Left" Margin="366,291,0,0" VerticalAlignment="Top"></Label>
-        <ComboBox x:Name="cmbDataTypeFromFile" HorizontalAlignment="Left" Margin="470,294,0,0" VerticalAlignment="Top" Width="140" Height="22"></ComboBox>
-        <Label Content="Access Modifier: " HorizontalAlignment="Left" Margin="366,319,0,0" VerticalAlignment="Top"></Label>
-        <ComboBox x:Name="cmbAccessModifierFromFile" HorizontalAlignment="Left" Margin="470,325,0,0" VerticalAlignment="Top" Width="140" Height="22"></ComboBox>
+        <Label Content="Class name: " HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top"></Label>
+        <TextBox x:Name="txtClassName" HorizontalAlignment="Left" Margin="128,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="22"></TextBox>
+        <Label Content="Property name: " HorizontalAlignment="Left" Margin="10,98,0,0" VerticalAlignment="Top"></Label>
+        <TextBox x:Name="txtPropertyName" HorizontalAlignment="Left" Margin="128,101,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="22"></TextBox>
+        <Label Content="Data Type: " HorizontalAlignment="Left" Margin="366,66,0,0" VerticalAlignment="Top"></Label>
+        <ComboBox x:Name="cmbDataType" HorizontalAlignment="Left" Margin="470,69,0,0" VerticalAlignment="Top" Width="140" Height="22"></ComboBox>
+        <Label Content="Access Modifier: " HorizontalAlignment="Left" Margin="366,98,0,0" VerticalAlignment="Top"></Label>
+        <ComboBox x:Name="cmbAccessModifier" HorizontalAlignment="Left" Margin="470,101,0,0" VerticalAlignment="Top" Width="140" Height="22"></ComboBox>
+        <Label Content="# of Added Properties: " HorizontalAlignment="Left" Margin="16,136,0,0" VerticalAlignment="Top"></Label>
+        <TextBox x:Name="txtAddedProperties" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="20" IsEnabled="False" Margin="154,139,0,0"/>
 
-        <Button x:Name="btnGenerate" Content="Generate"  HorizontalAlignment="Left" Margin="514,362,0,0" VerticalAlignment="Top" Click="btnGenerate_Click"></Button>
-        <Button x:Name="btnCancel" Content="Cancel"  HorizontalAlignment="Left" Margin="571,362,0,0" VerticalAlignment="Top" Click="btnCancel_Click"></Button>
+        <Button x:Name="btnAddProperty" Content="Add Property"  HorizontalAlignment="Left" Margin="226,139,0,0" VerticalAlignment="Top" Click="btnAddProperty_Click" Width="80"></Button>
+        <Button x:Name="btnAddClass" Content="Add Class"  HorizontalAlignment="Left" Margin="540,139,0,0" VerticalAlignment="Top" Width="70" Click="btnAddClass_Click"></Button>
+        <Button x:Name="btnGenerate" Content="Generate"  HorizontalAlignment="Left" Margin="514,238,0,0" VerticalAlignment="Top" Click="btnGenerate_Click"></Button>
+        <Button x:Name="btnCancel" Content="Cancel"  HorizontalAlignment="Left" Margin="571,238,0,0" VerticalAlignment="Top" Click="btnCancel_Click"></Button>
     </Grid>
 </Window>

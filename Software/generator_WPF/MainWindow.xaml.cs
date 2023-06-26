@@ -18,6 +18,9 @@ namespace generator_WPF
     {	        
         List<TableMetadata> tables = new List<TableMetadata>();
         List<List<TableMetadata>> classes = new List<List<TableMetadata>>();
+        List<TableMetadata> metadataFromFile = new List<TableMetadata>();
+        int indexMetadata = 0;
+        int addedProperties = 0;
         Generator_WPF generator = new Generator_WPF();
 
 		public MainWindow()
@@ -31,10 +34,6 @@ namespace generator_WPF
             cmbAccessModifier.Items.Add("Protected");
             cmbAccessModifier.SelectedItem = "Public";
 
-            cmbAccessModifierFromFile.Items.Add("Public");
-            cmbAccessModifierFromFile.Items.Add("Private");
-            cmbAccessModifierFromFile.Items.Add("Protected");
-
             cmbDataType.Items.Add("Integer");
             cmbDataType.Items.Add("Float");
             cmbDataType.Items.Add("Double");
@@ -42,14 +41,7 @@ namespace generator_WPF
             cmbDataType.Items.Add("Character");
             cmbDataType.Items.Add("Bool");
             cmbDataType.Items.Add("DateTime");
-
-            cmbDataTypeFromFile.Items.Add("Integer");
-            cmbDataTypeFromFile.Items.Add("Float");
-            cmbDataTypeFromFile.Items.Add("Double");
-            cmbDataTypeFromFile.Items.Add("String");
-            cmbDataTypeFromFile.Items.Add("Character");
-            cmbDataTypeFromFile.Items.Add("Bool");
-            cmbDataTypeFromFile.Items.Add("DateTime");
+            cmbDataType.SelectedItem = "Integer";
         }
 
         private void btnChooseFile_Click(object sender, RoutedEventArgs e)
@@ -64,75 +56,71 @@ namespace generator_WPF
             {
                 string selectedFilePath = openFileDialog.FileName;
                 string jsonContent = File.ReadAllText(selectedFilePath);
-                var metadata = JsonConvert.DeserializeObject<List<TableMetadata>>(jsonContent);
+                metadataFromFile = JsonConvert.DeserializeObject<List<TableMetadata>>(jsonContent);
 
                 string regexForInt = @"\b[intI][nN][tT]\b";
                 string regexForPublic = @"\b[publicP][uU][bB][lL][iI][cC]\b";
 
-                txtClassNameFromFile.Text = metadata.FirstOrDefault().TableName;
-                txtPropertyNameFromFile.Text = metadata.FirstOrDefault().ColumnName;
+                txtClassName.Text = metadataFromFile.FirstOrDefault().TableName;
+                txtPropertyName.Text = metadataFromFile.FirstOrDefault().ColumnName;
 
-                string dataType = metadata.FirstOrDefault().DataType;
-                string accessModifier = metadata.FirstOrDefault().AccessModifier;
+                string dataType = metadataFromFile.FirstOrDefault().DataType;
+                string accessModifier = metadataFromFile.FirstOrDefault().AccessModifier;
 
-                if (!string.IsNullOrEmpty(dataType))
+                CheckRegex(dataType, accessModifier, regexForInt, regexForPublic);
+            }
+        }
+
+        private void CheckRegex(string dataType, string accessModifier, string regexInt, string regexPublic)
+        {
+            if (!string.IsNullOrEmpty(dataType))
+            {
+                if (Regex.IsMatch(dataType, regexInt, RegexOptions.IgnoreCase))
                 {
-                    if (Regex.IsMatch(dataType, regexForInt, RegexOptions.IgnoreCase))
-                    {
-                        cmbDataTypeFromFile.SelectedItem = "Integer";
-                    }
+                    cmbDataType.SelectedItem = "Integer";
                 }
+            }
 
-                if (!string.IsNullOrEmpty(accessModifier))
+            if (!string.IsNullOrEmpty(accessModifier))
+            {
+                if (Regex.IsMatch(accessModifier, regexPublic, RegexOptions.IgnoreCase))
                 {
-                    if(Regex.IsMatch(accessModifier, regexForPublic, RegexOptions.IgnoreCase))
-                    {
-                        cmbAccessModifierFromFile.SelectedItem = "Public";
-                    }
+                    cmbAccessModifier.SelectedItem = "Public";
                 }
-
-                tables.AddRange(metadata);
-
-                /*
-                //openFileDialog.ValidateNames = true;
-                foreach (string file in openFileDialog.FileNames)
-                {
-                    if (openFileDialog.CheckFileExists && openFileDialog.CheckPathExists)
-                    {
-                        //var fileStream = new FileStream(selectedFilePath, FileMode.Open);
-                        string selectedFilePath = openFileDialog.FileName;
-
-                        try
-                        {
-                            string jsonContent = File.ReadAllText(selectedFilePath);
-                            var metadata1 = JsonConvert.DeserializeObject<TablesMetadata>(jsonContent);
-                            var metadata2 = JsonConvert.DeserializeObject<TableMetadata>(jsonContent);
-
-                            System.Windows.Forms.MessageBox.Show("Test = " + metadata2.Name.ToString());
-
-                            txtTableNameFromFile.Text = metadata2.Name.ToString();
-                            txtColumnNameFromFile.Text = metadata2.Columns.FirstOrDefault().Name.ToString();
-
-                            //foreach (var table in metadata.Tables)
-                            //{
-                            //    generator.GenerateClass();
-                            //}
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("Greška prilikom čitanja datoteke: " + ex.Message);
-                        }
-                    }
-                }
-                */
             }
         }
 
         private void btnAddProperty_Click(object sender, RoutedEventArgs e)
         {
-            if (txtClassName.Text.Length != 0 &&
-                txtPropertyName.Text.Length != 0 &&
-                cmbDataType.SelectedItem.ToString() == "")
+            if (metadataFromFile.Count > 0 && indexMetadata < metadataFromFile.Count)
+            {
+                TableMetadata metadata = new TableMetadata
+                {
+                    TableName = metadataFromFile[indexMetadata].TableName,
+                    ColumnName = metadataFromFile[indexMetadata].ColumnName,
+                    DataType = metadataFromFile[indexMetadata].DataType,
+                    AccessModifier = metadataFromFile[indexMetadata].AccessModifier
+                };
+                tables.Add(metadata);
+                addedProperties++;
+                txtAddedProperties.Text = addedProperties.ToString();
+                if (indexMetadata + 1 != metadataFromFile.Count)
+                {
+                    indexMetadata++;
+                    txtClassName.Text = metadataFromFile[indexMetadata].TableName;
+                    txtPropertyName.Text = metadataFromFile[indexMetadata].ColumnName;
+                    cmbDataType.SelectedItem = metadataFromFile[indexMetadata].DataType;
+                    cmbAccessModifier.SelectedItem = metadataFromFile[indexMetadata].AccessModifier;
+                }
+                else
+                {
+                    txtPropertyName.Text = "";
+                    cmbDataType.SelectedItem = "Integer";
+                    cmbAccessModifier.SelectedItem = "Public";
+                    metadataFromFile.Clear();
+                }
+            }
+            else if (txtClassName.Text.Length != 0 && txtPropertyName.Text.Length != 0)
             {
                 TableMetadata metadata = new TableMetadata
                 {
@@ -142,10 +130,9 @@ namespace generator_WPF
                     AccessModifier = cmbAccessModifier.SelectedItem.ToString()
                 };
                 tables.Add(metadata);
-
+                addedProperties++;
+                txtAddedProperties.Text = addedProperties.ToString();
                 txtPropertyName.Text = "";
-
-                txtAddedProperties.Text = tables.Count.ToString();
                 txtClassName.IsEnabled = false;
             }
             else
@@ -155,20 +142,41 @@ namespace generator_WPF
         }
         private void btnAddClass_Click(object sender, RoutedEventArgs e)
         {
-            classes.Add(tables);
-            tables.Clear();
-            txtClassName.Text = "";
-            txtPropertyName.Text = "";
-            cmbAccessModifier.SelectedItem = "Public";
-            txtAddedProperties.Text = "";
-            txtClassName.IsEnabled = true;
+            if(metadataFromFile.Count > 0)
+            {
+                metadataFromFile.Clear();
+                indexMetadata = 0;
+            }
+
+            if (tables.Count > 0)
+            {
+                classes.Add(tables);
+                tables.Clear();
+                txtClassName.Text = "";
+                txtPropertyName.Text = "";
+                cmbAccessModifier.SelectedItem = "Public";
+                txtAddedProperties.Text = "";
+                txtClassName.IsEnabled = true;
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("Add at least one property to the class!");
+            }
         }
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
-            foreach(var classToGenerate in classes)
+            if (classes.Count != 0)
             {
-                generator.GenerateClass(classToGenerate);
+                foreach (var classToGenerate in classes)
+                {
+                    System.Windows.Forms.MessageBox.Show("classToGenerate.FirstOrDefault() = " + classToGenerate.FirstOrDefault().TableName.ToString());
+                    generator.GenerateClass(classToGenerate);
+                }
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show("No classes added to generate!");
             }
         }
 
