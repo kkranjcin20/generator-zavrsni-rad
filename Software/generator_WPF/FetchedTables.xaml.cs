@@ -31,7 +31,17 @@ namespace generator_WPF
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            generator.FetchTables(_connectionString);
+            var tables = generator.FetchTables(_connectionString);
+            dgTables.ItemsSource = tables;
+        }
+
+        private void btnChooseTable_Click(object sender, RoutedEventArgs e)
+        {
+            if(dgTables.SelectedItem != null)
+            {
+                var selectedTable = dgTables.SelectedItem as TableMetadata;
+                generator.FetchTableMetadata(selectedTable);
+            }
         }
     }
 }

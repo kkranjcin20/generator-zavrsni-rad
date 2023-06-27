@@ -8,11 +8,10 @@
         Title="Generator" Height="350" Width="650" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
         <Label Content="Enter class data manually or choose JSON file" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"></Label>
-        <Button x:Name="btnChooseFile" Content="Choose file"  HorizontalAlignment="Left" Margin="16,42,0,0" VerticalAlignment="Top" Click="btnChooseFile_Click" Width="69"></Button>
 
-        <Label Content="Connection String: " HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top"></Label>
-        <TextBox x:Name="txtConnectionString" HorizontalAlignment="Left" Margin="126,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="22"></TextBox>
-        <Button x:Name="btnFetchMetadata" Content="Fetch metadata"  HorizontalAlignment="Left" Margin="300,80,0,0" VerticalAlignment="Top" Width="100" Click="btnFetchMetadata_Click"></Button>
+        <Label Content="Connection String: " HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"></Label>
+        <TextBox x:Name="txtConnectionString" HorizontalAlignment="Left" Margin="126,52,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220" Height="40"></TextBox>
+        <Button x:Name="btnFetchMetadata" Content="Fetch Metadata"  HorizontalAlignment="Left" Margin="365,53,0,0" VerticalAlignment="Top" Width="100" Click="btnFetchMetadata_Click"></Button>
 
         <Label Content="Namespace: " HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top"></Label>
         <TextBox x:Name="txtNamespace" HorizontalAlignment="Left" Margin="126,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="22"></TextBox>

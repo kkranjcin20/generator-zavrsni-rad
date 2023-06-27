@@ -18,12 +18,12 @@ namespace generator_WPF
     /// </summary>
     public partial class MainWindow : System.Windows.Window
     {	        
-        List<TableMetadata> properties = new List<TableMetadata>();
-        List<List<TableMetadata>> classes = new List<List<TableMetadata>>();
-        List<TableMetadata> metadataFromFile = new List<TableMetadata>();
-        int indexMetadata = 0;
-        int addedProperties = 0;
+        List<TableMetadata> classes = new List<TableMetadata>();
+        List<ColumnMetadata> columns = new List<ColumnMetadata>();
+        TableMetadata currentClass = new TableMetadata();
         Generator_WPF generator = new Generator_WPF();
+        int addedProperties = 0;
+        bool firstTime = true;
 
         public MainWindow()
         {
@@ -48,53 +48,14 @@ namespace generator_WPF
 
         private void btnFetchMetadata_Click(object sender, RoutedEventArgs e)
         {
-            FetchedTables fetchedTables = new FetchedTables();
-            fetchedTables.ShowDialog();
-        }
-
-        private void btnChooseFile_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            if(txtConnectionString.Text.Length != 0)
             {
-                Multiselect = false,
-                Filter = "JSON files (*.json)|*.json"
-            };
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                string selectedFilePath = openFileDialog.FileName;
-                string jsonContent = File.ReadAllText(selectedFilePath);
-                metadataFromFile = JsonConvert.DeserializeObject<List<TableMetadata>>(jsonContent);
-
-                string regexForInt = @"\b[intI][nN][tT]\b";
-                string regexForPublic = @"\b[publicP][uU][bB][lL][iI][cC]\b";
-
-                txtClassName.Text = metadataFromFile.FirstOrDefault().TableName;
-                txtPropertyName.Text = metadataFromFile.FirstOrDefault().ColumnName;
-
-                string dataType = metadataFromFile.FirstOrDefault().DataType;
-                string accessModifier = metadataFromFile.FirstOrDefault().AccessModifier;
-
-                CheckRegex(dataType, accessModifier, regexForInt, regexForPublic);
+                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text);
+                fetchedTables.ShowDialog();
             }
-        }
-
-        private void CheckRegex(string dataType, string accessModifier, string regexInt, string regexPublic)
-        {
-            if (!string.IsNullOrEmpty(dataType))
+            else
             {
-                if (Regex.IsMatch(dataType, regexInt, RegexOptions.IgnoreCase))
-                {
-                    cmbDataType.SelectedItem = "Integer";
-                }
-            }
-
-            if (!string.IsNullOrEmpty(accessModifier))
-            {
-                if (Regex.IsMatch(accessModifier, regexPublic, RegexOptions.IgnoreCase))
-                {
-                    cmbAccessModifier.SelectedItem = "Public";
-                }
+                System.Windows.Forms.MessageBox.Show("Insert the connection string!");
             }
         }
 
@@ -104,52 +65,26 @@ namespace generator_WPF
             {
                 if (txtClassName.Text != txtPropertyName.Text)
                 {
-                    if (metadataFromFile.Count > 0 && indexMetadata < metadataFromFile.Count)
+                    string dataType = GetDataType();
+                    ColumnMetadata column = new ColumnMetadata
                     {
-                        TableMetadata metadata = new TableMetadata
-                        {
-                            TableName = metadataFromFile[indexMetadata].TableName,
-                            ColumnName = metadataFromFile[indexMetadata].ColumnName,
-                            DataType = metadataFromFile[indexMetadata].DataType,
-                            AccessModifier = metadataFromFile[indexMetadata].AccessModifier
-                        };
-                        properties.Add(metadata);
-                        addedProperties++;
-                        txtAddedProperties.Text = addedProperties.ToString();
-                        if (indexMetadata + 1 != metadataFromFile.Count)
-                        {
-                            indexMetadata++;
-                            txtClassName.Text = metadataFromFile[indexMetadata].TableName;
-                            txtPropertyName.Text = metadataFromFile[indexMetadata].ColumnName;
-                            cmbDataType.SelectedItem = metadataFromFile[indexMetadata].DataType;
-                            cmbAccessModifier.SelectedItem = metadataFromFile[indexMetadata].AccessModifier;
-                        }
-                        else
-                        {
-                            txtPropertyName.Text = "";
-                            cmbDataType.SelectedItem = "Integer";
-                            cmbAccessModifier.SelectedItem = "Public";
-                            metadataFromFile.Clear();
-                        }
-                    }
-                    else
-                    {
-                        string dataType = GetDataType();
+                        Name = txtPropertyName.Text,
+                        DataType = dataType,
+                        AccessModifier = cmbAccessModifier.SelectedItem.ToString()
+                    };
+                    columns.Add(column);
 
-                        TableMetadata metadata = new TableMetadata
-                        {
-                            TableName = txtClassName.Text,
-                            ColumnName = txtPropertyName.Text,
-                            DataType = dataType,
-                            AccessModifier = cmbAccessModifier.SelectedItem.ToString()
-                        };
-                        properties.Add(metadata);
-                        addedProperties++;
-                        txtAddedProperties.Text = addedProperties.ToString();
-                        txtPropertyName.Text = "";
-                        txtClassName.IsEnabled = false;
-                        txtNamespace.IsEnabled = false;
+                    if (firstTime)
+                    {
+                        currentClass.Name = txtClassName.Text;
                     }
+                    
+                    addedProperties++;
+                    txtAddedProperties.Text = addedProperties.ToString();
+                    txtPropertyName.Text = "";
+                    txtClassName.IsEnabled = false;
+                    txtNamespace.IsEnabled = false;
+                    firstTime = false;
                 }
                 else
                 {
@@ -198,24 +133,19 @@ namespace generator_WPF
         {
             if(addedProperties != 0)
             {
-                if(metadataFromFile.Count > 0)
-                {
-                    metadataFromFile.Clear();
-                    indexMetadata = 0;
-                }
+                currentClass.Columns.AddRange(new List<ColumnMetadata>(columns));
+                classes.Add(currentClass);
+                columns.Clear();
 
-                if (properties.Count > 0)
-                {
-                    classes.Add(new List<TableMetadata>(properties));
-                    properties.Clear();
-                    txtNamespace.Text = "";
-                    txtClassName.Text = "";
-                    txtPropertyName.Text = "";
-                    cmbAccessModifier.SelectedItem = "Public";
-                    txtAddedProperties.Text = "";
-                    txtClassName.IsEnabled = true;
-                    addedProperties = 0;
-                }
+                firstTime = true;
+                txtNamespace.Text = "";
+                txtClassName.Text = "";
+                txtPropertyName.Text = "";
+                cmbAccessModifier.SelectedItem = "Public";
+                txtAddedProperties.Text = "";
+                txtClassName.IsEnabled = true;
+                txtNamespace.IsEnabled = true;
+                addedProperties = 0;
             }
             else
             {

@@ -14,8 +14,10 @@ namespace generator_WPF.Generator_BLL
 {
     public class Generator_WPF
     {
+        private string _connectionString;
         public List<TableMetadata> FetchTables(string connectionString)
         {
+            _connectionString = connectionString;
             var tables = new List<TableMetadata>();
 
             //string connectionString = "Data Source=DESKTOP-0I6GRQT;Initial Catalog=zavrsni_bp;Integrated Security=True";
@@ -29,7 +31,7 @@ namespace generator_WPF.Generator_BLL
                 while (reader.Read())
                 {
                     var table = new TableMetadata();
-                    table.TableName = reader["TABLE_NAME"].ToString();
+                    table.Name = reader["TABLE_NAME"].ToString();
                     tables.Add(table);
                 }
                 reader.Close();
@@ -38,33 +40,32 @@ namespace generator_WPF.Generator_BLL
             return tables;
         }
 
-        public TableMetadata FetchTableMetadata(string connectionString, string tableName)
+        public TableMetadata FetchTableMetadata(TableMetadata table)
         {
-            //string connectionString = "Data Source=DESKTOP-0I6GRQT;Initial Catalog=zavrsni_bp;Integrated Security=True";
             string query = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    if (reader["TABLE_NAME"].ToString() == tableName)
+                    if (reader["TABLE_NAME"].ToString() == table.Name)
                     {
-                        tableMetadata.TableName = reader["TABLE_NAME"].ToString();
-                        tableMetadata.TableSchema = reader["TABLE_SCHEMA"].ToString();
+                        table.Name = reader["TABLE_NAME"].ToString();
                     }
                 }
                 reader.Close();
 
-                command.CommandText = $"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableMetadata.TableName}'";
+                command.CommandText = $"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table.Name}'";
                 reader = command.ExecuteReader();
-                tableMetadata.Columns = new List<ColumnMetadata>();
+
+                table.Columns = new List<ColumnMetadata>();
                 while (reader.Read())
                 {
                     ColumnMetadata column = new ColumnMetadata();
-                    column.ColumnName = reader["COLUMN_NAME"].ToString();
+                    column.Name = reader["COLUMN_NAME"].ToString();
                     if (reader["DATA_TYPE"].ToString() == "varchar")
                     {
                         column.DataType = "string";
@@ -77,32 +78,28 @@ namespace generator_WPF.Generator_BLL
                     {
                         column.DataType = reader["DATA_TYPE"].ToString();
                     }
-                    column.IsNullable = (reader["IS_NULLABLE"].ToString() == "YES");
-                    //column.IsPrimaryKey = (reader["COLUMN_KEY"].ToString() == "PRI");
-                    //column.IsForeignKey = (reader["COLUMN_KEY"].ToString() == "MUL");
-                    column.IsUnique = (reader["COLUMN_NAME"].ToString() == "UNIQUE");
-                    tableMetadata.Columns.Add(column);
+                    table.Columns.Add(column);
                 }
                 reader.Close();
 
                 connection.Close();
             }
 
-            return tableMetadata;
+            return table;
         }
 
-        public void GenerateClass(List<TableMetadata> classesList, string classNamespace)
+        public void GenerateClass(TableMetadata classes, string classNamespace)
         {
             string filePath = Path.GetTempFileName() + ".cs";
 
             UsingDirectiveSyntax generatedUsingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
             NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(classNamespace));
-            ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(classesList.FirstOrDefault().TableName);
+            ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(classes.Name);
             PropertyDeclarationSyntax property;
             
-            foreach (TableMetadata classProperty in classesList)
+            foreach (ColumnMetadata column in classes.Columns)
             {
-                property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(classProperty.DataType), classProperty.ColumnName)
+                property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(column.DataType), column.Name)
                     .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
                     .WithAccessorList(SyntaxFactory.AccessorList(
                         SyntaxFactory.List(new[]
