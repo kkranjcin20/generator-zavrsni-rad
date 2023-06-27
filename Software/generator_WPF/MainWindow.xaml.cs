@@ -46,6 +46,12 @@ namespace generator_WPF
             cmbDataType.SelectedItem = "Integer";
         }
 
+        private void btnFetchMetadata_Click(object sender, RoutedEventArgs e)
+        {
+            FetchedTables fetchedTables = new FetchedTables();
+            fetchedTables.ShowDialog();
+        }
+
         private void btnChooseFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog

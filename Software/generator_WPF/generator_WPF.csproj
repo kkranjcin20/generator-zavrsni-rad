@@ -237,8 +237,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FetchedTables.xaml.cs">
+      <DependentUpon>FetchedTables.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Generator_BLL\Generator_WPF.cs" />
     <Compile Include="TableMetadata.cs" />
+    <Page Include="FetchedTables.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
