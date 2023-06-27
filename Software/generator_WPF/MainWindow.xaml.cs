@@ -16,7 +16,7 @@ namespace generator_WPF
     /// </summary>
     public partial class MainWindow : Window
     {	        
-        List<TableMetadata> tables = new List<TableMetadata>();
+        List<TableMetadata> properties = new List<TableMetadata>();
         List<List<TableMetadata>> classes = new List<List<TableMetadata>>();
         List<TableMetadata> metadataFromFile = new List<TableMetadata>();
         int indexMetadata = 0;
@@ -48,7 +48,7 @@ namespace generator_WPF
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Multiselect = true,
+                Multiselect = false,
                 Filter = "JSON files (*.json)|*.json"
             };
 
@@ -92,71 +92,122 @@ namespace generator_WPF
 
         private void btnAddProperty_Click(object sender, RoutedEventArgs e)
         {
-            if (metadataFromFile.Count > 0 && indexMetadata < metadataFromFile.Count)
+            if (txtClassName.Text.Length != 0 && txtPropertyName.Text.Length != 0 && txtNamespace.Text.Length != 0)
             {
-                TableMetadata metadata = new TableMetadata
+                if (txtClassName.Text != txtPropertyName.Text)
                 {
-                    TableName = metadataFromFile[indexMetadata].TableName,
-                    ColumnName = metadataFromFile[indexMetadata].ColumnName,
-                    DataType = metadataFromFile[indexMetadata].DataType,
-                    AccessModifier = metadataFromFile[indexMetadata].AccessModifier
-                };
-                tables.Add(metadata);
-                addedProperties++;
-                txtAddedProperties.Text = addedProperties.ToString();
-                if (indexMetadata + 1 != metadataFromFile.Count)
-                {
-                    indexMetadata++;
-                    txtClassName.Text = metadataFromFile[indexMetadata].TableName;
-                    txtPropertyName.Text = metadataFromFile[indexMetadata].ColumnName;
-                    cmbDataType.SelectedItem = metadataFromFile[indexMetadata].DataType;
-                    cmbAccessModifier.SelectedItem = metadataFromFile[indexMetadata].AccessModifier;
+                    if (metadataFromFile.Count > 0 && indexMetadata < metadataFromFile.Count)
+                    {
+                        TableMetadata metadata = new TableMetadata
+                        {
+                            TableName = metadataFromFile[indexMetadata].TableName,
+                            ColumnName = metadataFromFile[indexMetadata].ColumnName,
+                            DataType = metadataFromFile[indexMetadata].DataType,
+                            AccessModifier = metadataFromFile[indexMetadata].AccessModifier
+                        };
+                        properties.Add(metadata);
+                        addedProperties++;
+                        txtAddedProperties.Text = addedProperties.ToString();
+                        if (indexMetadata + 1 != metadataFromFile.Count)
+                        {
+                            indexMetadata++;
+                            txtClassName.Text = metadataFromFile[indexMetadata].TableName;
+                            txtPropertyName.Text = metadataFromFile[indexMetadata].ColumnName;
+                            cmbDataType.SelectedItem = metadataFromFile[indexMetadata].DataType;
+                            cmbAccessModifier.SelectedItem = metadataFromFile[indexMetadata].AccessModifier;
+                        }
+                        else
+                        {
+                            txtPropertyName.Text = "";
+                            cmbDataType.SelectedItem = "Integer";
+                            cmbAccessModifier.SelectedItem = "Public";
+                            metadataFromFile.Clear();
+                        }
+                    }
+                    else
+                    {
+                        string dataType = GetDataType();
+
+                        TableMetadata metadata = new TableMetadata
+                        {
+                            TableName = txtClassName.Text,
+                            ColumnName = txtPropertyName.Text,
+                            DataType = dataType,
+                            AccessModifier = cmbAccessModifier.SelectedItem.ToString()
+                        };
+                        properties.Add(metadata);
+                        addedProperties++;
+                        txtAddedProperties.Text = addedProperties.ToString();
+                        txtPropertyName.Text = "";
+                        txtClassName.IsEnabled = false;
+                        txtNamespace.IsEnabled = false;
+                    }
                 }
                 else
                 {
-                    txtPropertyName.Text = "";
-                    cmbDataType.SelectedItem = "Integer";
-                    cmbAccessModifier.SelectedItem = "Public";
-                    metadataFromFile.Clear();
+                    System.Windows.MessageBox.Show("Class name and Property name can not be the same!", "Class and Member names", (MessageBoxButton)System.Windows.Forms.MessageBoxButtons.OK, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Error);
                 }
-            }
-            else if (txtClassName.Text.Length != 0 && txtPropertyName.Text.Length != 0)
-            {
-                TableMetadata metadata = new TableMetadata
-                {
-                    TableName = txtClassName.Text,
-                    ColumnName = txtPropertyName.Text,
-                    DataType = cmbDataType.SelectedItem.ToString(),
-                    AccessModifier = cmbAccessModifier.SelectedItem.ToString()
-                };
-                tables.Add(metadata);
-                addedProperties++;
-                txtAddedProperties.Text = addedProperties.ToString();
-                txtPropertyName.Text = "";
-                txtClassName.IsEnabled = false;
             }
             else
             {
                 System.Windows.Forms.MessageBox.Show("Insert all attributes!");
             }
         }
+
+        private string GetDataType()
+        {
+            string dataType = "";
+            string selectedItem = cmbDataType.SelectedItem.ToString();
+
+            switch (selectedItem)
+            {
+                case "Integer":
+                    dataType = "int";
+                    break;
+                case "Float":
+                    dataType = "float";
+                    break;
+                case "Double":
+                    dataType = "double";
+                    break;
+                case "String":
+                    dataType = "string";
+                    break;
+                case "Character":
+                    dataType = "char";
+                    break;
+                case "Bool":
+                    dataType = "bool";
+                    break;
+                case "DateTime":
+                    dataType = "DateTime";
+                    break;
+            }
+            return dataType;
+        }
+
         private void btnAddClass_Click(object sender, RoutedEventArgs e)
         {
-            if(metadataFromFile.Count > 0)
+            if(addedProperties != 0)
             {
-                metadataFromFile.Clear();
-                indexMetadata = 0;
-            }
+                if(metadataFromFile.Count > 0)
+                {
+                    metadataFromFile.Clear();
+                    indexMetadata = 0;
+                }
 
-            if (tables.Count > 0)
-            {
-                classes.Add(tables);
-                tables.Clear();
-                txtClassName.Text = "";
-                txtPropertyName.Text = "";
-                cmbAccessModifier.SelectedItem = "Public";
-                txtAddedProperties.Text = "";
-                txtClassName.IsEnabled = true;
+                if (properties.Count > 0)
+                {
+                    classes.Add(new List<TableMetadata>(properties));
+                    properties.Clear();
+                    txtNamespace.Text = "";
+                    txtClassName.Text = "";
+                    txtPropertyName.Text = "";
+                    cmbAccessModifier.SelectedItem = "Public";
+                    txtAddedProperties.Text = "";
+                    txtClassName.IsEnabled = true;
+                    addedProperties = 0;
+                }
             }
             else
             {
@@ -166,12 +217,28 @@ namespace generator_WPF
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
+            string selectedFolderPath;
+            using (var folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                string rootFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
+                folderBrowserDialog.SelectedPath = rootFolder;
+                System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
+
+                if (result.ToString() == "OK")
+                {
+                    selectedFolderPath = folderBrowserDialog.SelectedPath;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
             if (classes.Count != 0)
             {
                 foreach (var classToGenerate in classes)
                 {
-                    System.Windows.Forms.MessageBox.Show("classToGenerate.FirstOrDefault() = " + classToGenerate.FirstOrDefault().TableName.ToString());
-                    generator.GenerateClass(classToGenerate);
+                    generator.GenerateClass(classToGenerate, selectedFolderPath, txtNamespace.Text);
                 }
             }
             else

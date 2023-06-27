@@ -1,46 +1,29 @@
-﻿using System;
-using System.IO;
+﻿using Microsoft.Build.Evaluation;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Windows.Forms;
-using Microsoft.Build.Evaluation;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace generator_WPF.Generator_BLL
 {
     public class Generator_WPF
     {
-        public void GenerateClass(List<TableMetadata> tablesList)
+
+        public void GenerateClass(List<TableMetadata> classesList, string folderPath, string classNamespace)
         {
-            System.Windows.MessageBox.Show("GenerateClass method");
-            if(tablesList.Count == 0)
+            UsingDirectiveSyntax generatedUsingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
+            NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(classNamespace));
+            ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(classesList.FirstOrDefault().TableName);
+            PropertyDeclarationSyntax property;
+            
+            foreach (TableMetadata classProperty in classesList)
             {
-                System.Windows.MessageBox.Show("count == 0");
-            }
-            foreach (TableMetadata table in tablesList)
-            {
-                string projectDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\.."));
-                System.Windows.MessageBox.Show("projectDir = " + projectDir);
-
-                //string filePath = chosenPath + "\\" + table.TableName + ".cs";
-                string filePath = projectDir + "\\" + table.TableName + ".cs";
-                System.Windows.MessageBox.Show("filePath = " + filePath);
-
-                string solutionName = Path.GetFileNameWithoutExtension(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile);
-                if (solutionName.EndsWith("exe"))
-                {
-                    solutionName = Path.ChangeExtension(solutionName, null);
-                }
-
-                string projectFilePath = Path.Combine(projectDir, $"{solutionName}.csproj");
-
-                UsingDirectiveSyntax generatedUsingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
-                NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName($"{solutionName}"));
-                ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(table.TableName);
-
-                PropertyDeclarationSyntax property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(table.DataType), table.TableName)
+                property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(classProperty.DataType), classProperty.ColumnName)
                     .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
                     .WithAccessorList(SyntaxFactory.AccessorList(
                         SyntaxFactory.List(new[]
@@ -50,44 +33,35 @@ namespace generator_WPF.Generator_BLL
                 SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
                     .WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
                         })));
-
                 generatedClass = generatedClass.AddMembers(property);
+            }
                 
-                generatedNamespace = generatedNamespace.AddMembers(generatedClass);
+            generatedNamespace = generatedNamespace.AddMembers(generatedClass);
 
-                var compilationUnit = SyntaxFactory.CompilationUnit().AddUsings(generatedUsingDirective).AddMembers(generatedNamespace);
+            var compilationUnit = SyntaxFactory.CompilationUnit().AddUsings(generatedUsingDirective).AddMembers(generatedNamespace);
 
-                string generatedCode = compilationUnit.NormalizeWhitespace().ToFullString();
+            string generatedCode = compilationUnit.NormalizeWhitespace().ToFullString();
 
-                try
+            try
+            {
+                using (var fileStream = new FileStream(folderPath, FileMode.Create))
                 {
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    using (var streamWriter = new StreamWriter(fileStream))
                     {
-                        using (var streamWriter = new StreamWriter(fileStream))
-                        {
-                            streamWriter.Write(generatedCode);
-                        }
+                        streamWriter.Write(generatedCode);
                     }
                 }
-                catch (Exception ex)
-                {
-                    System.Windows.MessageBox.Show("Error creating file: " + ex.Message, "File Creation", (System.Windows.MessageBoxButton)MessageBoxButtons.OK, (System.Windows.MessageBoxImage)MessageBoxIcon.Error);
-                }
-
-                string relativePath;
-                if (projectDir.Length + 1 > filePath.Length)
-                {
-                    relativePath = filePath.Substring(projectDir.Length + 1);
-                }
-                else
-                {
-                    relativePath = filePath;
-                }
-
-                Project project = new Project(projectFilePath);
-                project.AddItem("Compile", relativePath);
-                project.Save();
             }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error creating file: " + ex.Message, "File Creation", (MessageBoxButton)MessageBoxButtons.OK, (MessageBoxImage)MessageBoxIcon.Error);
+            }
+
+            System.Diagnostics.Process.Start("notepad.exe", folderPath);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "C# Class (*.cs)|*.cs";
+            saveFileDialog.Title = classesList.FirstOrDefault().TableName;
         }
     }
 }
