@@ -14,8 +14,10 @@ namespace generator_WPF.Generator_BLL
     public class Generator_WPF
     {
 
-        public void GenerateClass(List<TableMetadata> classesList, string folderPath, string classNamespace)
+        public void GenerateClass(List<TableMetadata> classesList, string classNamespace)
         {
+            string filePath = Path.GetTempFileName() + ".cs";
+
             UsingDirectiveSyntax generatedUsingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
             NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(classNamespace));
             ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(classesList.FirstOrDefault().TableName);
@@ -44,7 +46,7 @@ namespace generator_WPF.Generator_BLL
 
             try
             {
-                using (var fileStream = new FileStream(folderPath, FileMode.Create))
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     using (var streamWriter = new StreamWriter(fileStream))
                     {
@@ -57,11 +59,7 @@ namespace generator_WPF.Generator_BLL
                 System.Windows.MessageBox.Show("Error creating file: " + ex.Message, "File Creation", (MessageBoxButton)MessageBoxButtons.OK, (MessageBoxImage)MessageBoxIcon.Error);
             }
 
-            System.Diagnostics.Process.Start("notepad.exe", folderPath);
-
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "C# Class (*.cs)|*.cs";
-            saveFileDialog.Title = classesList.FirstOrDefault().TableName;
+            System.Diagnostics.Process.Start("notepad.exe", filePath);
         }
     }
 }

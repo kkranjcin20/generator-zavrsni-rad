@@ -1,5 +1,7 @@
-﻿using generator_WPF.Generator_BLL;
+﻿using EnvDTE;
+using generator_WPF.Generator_BLL;
 using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
@@ -14,7 +16,7 @@ namespace generator_WPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {	        
         List<TableMetadata> properties = new List<TableMetadata>();
         List<List<TableMetadata>> classes = new List<List<TableMetadata>>();
@@ -23,7 +25,7 @@ namespace generator_WPF
         int addedProperties = 0;
         Generator_WPF generator = new Generator_WPF();
 
-		public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
         }
@@ -217,28 +219,11 @@ namespace generator_WPF
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
-            string selectedFolderPath;
-            using (var folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                string rootFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "source", "repos");
-                folderBrowserDialog.SelectedPath = rootFolder;
-                System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
-
-                if (result.ToString() == "OK")
-                {
-                    selectedFolderPath = folderBrowserDialog.SelectedPath;
-                }
-                else
-                {
-                    return;
-                }
-            }
-
             if (classes.Count != 0)
             {
                 foreach (var classToGenerate in classes)
                 {
-                    generator.GenerateClass(classToGenerate, selectedFolderPath, txtNamespace.Text);
+                    generator.GenerateClass(classToGenerate, txtNamespace.Text);
                 }
             }
             else

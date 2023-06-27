@@ -1,4 +1,5 @@
-﻿using generator_WPF;
+﻿using EnvDTE;
+using generator_WPF;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -9,7 +10,7 @@ namespace Generator_Extension
     {
         protected override void Execute(object sender, EventArgs e)
         {
-            if (System.Windows.Forms.MessageBox.Show("Solution must be reloaded to save generated classes. Do you still want to proceed?", "Reloading the solution", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (System.Windows.Forms.MessageBox.Show("The generated class will be displayed in the Notepad application, after which you will have the opportunity to copy it and save it to your desired location.", "", MessageBoxButtons.OK) == DialogResult.OK)
             {
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Show();
