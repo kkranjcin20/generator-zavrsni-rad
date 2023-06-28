@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -21,7 +22,6 @@ namespace generator_WPF.Generator_BLL
             _connectionString = connectionString;
             var tables = new List<TableMetadata>();
 
-            //string connectionString = "Data Source=DESKTOP-0I6GRQT;Initial Catalog=zavrsni_bp;Integrated Security=True";
             string query = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -92,10 +92,12 @@ namespace generator_WPF.Generator_BLL
         public void GenerateClass(TableMetadata classToGenerate)
         {
             string filePath = Path.GetTempFileName() + ".cs";
+            string formattedClassName = Regex.Replace(classToGenerate.Name, @"\s", "_");
+            string formattedNamespace = Regex.Replace(classToGenerate.Namespace, @"\s", "_");
 
             UsingDirectiveSyntax generatedUsingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
-            NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(classToGenerate.Namespace));
-            ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(classToGenerate.Name);
+            NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(formattedNamespace));
+            ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(formattedClassName);
             PropertyDeclarationSyntax property;
             
             foreach (ColumnMetadata column in classToGenerate.Columns)
@@ -114,7 +116,10 @@ namespace generator_WPF.Generator_BLL
                     modifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
                 }
 
-                property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(column.DataType), column.Name)
+                string formattedDataType = Regex.Replace(column.DataType, @"\s", "_");
+                string formattedColumnName = Regex.Replace(column.Name, @"\s", "_");
+
+                property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(formattedDataType), formattedColumnName)
                     .WithModifiers(modifiers)
                     .WithAccessorList(SyntaxFactory.AccessorList(
                         SyntaxFactory.List(new[]

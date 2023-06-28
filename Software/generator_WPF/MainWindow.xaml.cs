@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,7 +51,12 @@ namespace generator_WPF
         {
             if(txtConnectionString.Text.Length != 0 && txtNamespace.Text.Length != 0)
             {
-                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text);
+                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text, txtNamespace.Text);
+                fetchedTables.Closed += (s, args) =>
+                {
+                    txtConnectionString.Text = "";
+                    txtNamespace.Text = "";
+                };
                 fetchedTables.ShowDialog();
             }
             else
@@ -63,33 +69,43 @@ namespace generator_WPF
         {
             if (txtClassName.Text.Length != 0 && txtPropertyName.Text.Length != 0 && txtNamespace.Text.Length != 0)
             {
-                if (txtClassName.Text != txtPropertyName.Text)
+                bool isInvalidNamespaceName = Regex.IsMatch(txtNamespace.Text, @"^\d");
+                bool isInvalidClassName = Regex.IsMatch(txtClassName.Text, @"^\d");
+                bool isInvalidPropertyName = Regex.IsMatch(txtPropertyName.Text, @"^\d");
+                if (!isInvalidNamespaceName && !isInvalidClassName && !isInvalidPropertyName)
                 {
-                    if (firstTime)
+                    if (txtClassName.Text != txtPropertyName.Text)
                     {
-                        currentClass.Name = txtClassName.Text;
-                        currentClass.Namespace = txtNamespace.Text;
-                    }
+                        if (firstTime)
+                        {
+                            currentClass.Name = txtClassName.Text;
+                            currentClass.Namespace = txtNamespace.Text;
+                        }
 
-                    string dataType = GetDataType();
-                    ColumnMetadata column = new ColumnMetadata
-                    {
-                        Name = txtPropertyName.Text,
-                        DataType = dataType,
-                        AccessModifier = cmbAccessModifier.SelectedItem.ToString()
-                    };
-                    columns.Add(column);
+                        string dataType = GetDataType();
+                        ColumnMetadata column = new ColumnMetadata
+                        {
+                            Name = txtPropertyName.Text,
+                            DataType = dataType,
+                            AccessModifier = cmbAccessModifier.SelectedItem.ToString()
+                        };
+                        columns.Add(column);
                     
-                    addedProperties++;
-                    txtAddedProperties.Text = addedProperties.ToString();
-                    txtPropertyName.Text = "";
-                    txtClassName.IsEnabled = false;
-                    txtNamespace.IsEnabled = false;
-                    firstTime = false;
+                        addedProperties++;
+                        txtAddedProperties.Text = addedProperties.ToString();
+                        txtPropertyName.Text = "";
+                        txtClassName.IsEnabled = false;
+                        txtNamespace.IsEnabled = false;
+                        firstTime = false;
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show("Class name and Property name can not be the same!", "Invalid Names", (MessageBoxButton)System.Windows.Forms.MessageBoxButtons.OK, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("Class name and Property name can not be the same!", "Class and Member names", (MessageBoxButton)System.Windows.Forms.MessageBoxButtons.OK, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Error);
+                    System.Windows.MessageBox.Show("Namespace, Class and Property names can not start with a digit!", "Invalid Names", (MessageBoxButton)System.Windows.Forms.MessageBoxButtons.OK, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Error);
                 }
             }
             else
