@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:generator_WPF"
         mc:Ignorable="d"
-        Title="Generator" Height="400" Width="650" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="Generator" Height="400" Width="650" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="/icon.png">
     <Grid>
         <Label Content="Enter class data manually or insert connection string for database" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"></Label>
 
