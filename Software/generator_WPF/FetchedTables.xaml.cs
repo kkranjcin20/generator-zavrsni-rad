@@ -23,10 +23,12 @@ namespace generator_WPF
     {
         Generator_WPF generator = new Generator_WPF();
         private string _connectionString;
-        public FetchedTables(string connectionString)
+        private string _classNamespace;
+        public FetchedTables(string connectionString, string classNamespace)
         {
             InitializeComponent();
             _connectionString = connectionString;
+            _classNamespace = classNamespace;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -40,7 +42,8 @@ namespace generator_WPF
             if(dgTables.SelectedItem != null)
             {
                 var selectedTable = dgTables.SelectedItem as TableMetadata;
-                generator.FetchTableMetadata(selectedTable);
+                var table = generator.FetchTableMetadata(selectedTable);
+                generator.GenerateClass(table, _classNamespace);
             }
         }
     }

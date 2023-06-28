@@ -48,14 +48,14 @@ namespace generator_WPF
 
         private void btnFetchMetadata_Click(object sender, RoutedEventArgs e)
         {
-            if(txtConnectionString.Text.Length != 0)
+            if(txtConnectionString.Text.Length != 0 && txtNamespace.Text.Length != 0)
             {
-                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text);
+                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text, txtNamespace.Text);
                 fetchedTables.ShowDialog();
             }
             else
             {
-                System.Windows.Forms.MessageBox.Show("Insert the connection string!");
+                System.Windows.Forms.MessageBox.Show("Insert the Connection String and Namespace for your Class!");
             }
         }
 
@@ -65,6 +65,11 @@ namespace generator_WPF
             {
                 if (txtClassName.Text != txtPropertyName.Text)
                 {
+                    if (firstTime)
+                    {
+                        currentClass.Name = txtClassName.Text;
+                    }
+
                     string dataType = GetDataType();
                     ColumnMetadata column = new ColumnMetadata
                     {
@@ -73,11 +78,6 @@ namespace generator_WPF
                         AccessModifier = cmbAccessModifier.SelectedItem.ToString()
                     };
                     columns.Add(column);
-
-                    if (firstTime)
-                    {
-                        currentClass.Name = txtClassName.Text;
-                    }
                     
                     addedProperties++;
                     txtAddedProperties.Text = addedProperties.ToString();
@@ -133,6 +133,7 @@ namespace generator_WPF
         {
             if(addedProperties != 0)
             {
+                currentClass.Columns = new List<ColumnMetadata>();
                 currentClass.Columns.AddRange(new List<ColumnMetadata>(columns));
                 classes.Add(currentClass);
                 columns.Clear();
@@ -159,6 +160,7 @@ namespace generator_WPF
             {
                 foreach (var classToGenerate in classes)
                 {
+                    System.Windows.Forms.MessageBox.Show("Access = " + classToGenerate.Columns.FirstOrDefault().AccessModifier);
                     generator.GenerateClass(classToGenerate, txtNamespace.Text);
                 }
             }
