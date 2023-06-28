@@ -50,7 +50,7 @@ namespace generator_WPF
         {
             if(txtConnectionString.Text.Length != 0 && txtNamespace.Text.Length != 0)
             {
-                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text, txtNamespace.Text);
+                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text);
                 fetchedTables.ShowDialog();
             }
             else
@@ -68,6 +68,7 @@ namespace generator_WPF
                     if (firstTime)
                     {
                         currentClass.Name = txtClassName.Text;
+                        currentClass.Namespace = txtNamespace.Text;
                     }
 
                     string dataType = GetDataType();
@@ -160,8 +161,7 @@ namespace generator_WPF
             {
                 foreach (var classToGenerate in classes)
                 {
-                    System.Windows.Forms.MessageBox.Show("Access = " + classToGenerate.Columns.FirstOrDefault().AccessModifier);
-                    generator.GenerateClass(classToGenerate, txtNamespace.Text);
+                    generator.GenerateClass(classToGenerate);
                 }
             }
             else

@@ -10,6 +10,7 @@ namespace generator_WPF
     {
         public string Name { get; set; }
         public List<ColumnMetadata> Columns { get; set; }
+        public string Namespace { get; set; }
     }
 
     public class ColumnMetadata

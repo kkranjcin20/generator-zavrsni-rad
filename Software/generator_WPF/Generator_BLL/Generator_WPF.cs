@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace generator_WPF.Generator_BLL
 {
@@ -88,19 +89,33 @@ namespace generator_WPF.Generator_BLL
             return table;
         }
 
-        public void GenerateClass(TableMetadata classes, string classNamespace)
+        public void GenerateClass(TableMetadata classToGenerate)
         {
             string filePath = Path.GetTempFileName() + ".cs";
 
             UsingDirectiveSyntax generatedUsingDirective = SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
-            NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(classNamespace));
-            ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(classes.Name);
+            NamespaceDeclarationSyntax generatedNamespace = SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(classToGenerate.Namespace));
+            ClassDeclarationSyntax generatedClass = SyntaxFactory.ClassDeclaration(classToGenerate.Name);
             PropertyDeclarationSyntax property;
             
-            foreach (ColumnMetadata column in classes.Columns)
+            foreach (ColumnMetadata column in classToGenerate.Columns)
             {
+                SyntaxTokenList modifiers;
+                if (column.AccessModifier == "Private")
+                {
+                    modifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PrivateKeyword));
+                }
+                else if (column.AccessModifier == "Protected")
+                {
+                    modifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.ProtectedKeyword));
+                }
+                else
+                {
+                    modifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+                }
+
                 property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(column.DataType), column.Name)
-                    .WithModifiers(SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword)))
+                    .WithModifiers(modifiers)
                     .WithAccessorList(SyntaxFactory.AccessorList(
                         SyntaxFactory.List(new[]
                         {
