@@ -1,5 +1,4 @@
-﻿using EnvDTE;
-using generator_WPF.Generator_BLL;
+﻿using generator_WPF.Generator_BLL;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
@@ -7,9 +6,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace generator_WPF

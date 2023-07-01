@@ -1,6 +1,5 @@
 ﻿using EnvDTE;
 using generator_WPF;
-using System.Windows;
 using System.Windows.Forms;
 
 namespace Generator_Extension
