@@ -21,7 +21,6 @@ namespace generator_WPF.Generator_BLL
             _connectionString = connectionString;
             var tables = new List<TableMetadata>();
 
-            //string connectionString = "Data Source=DESKTOP-0I6GRQT;Initial Catalog=zavrsni_bp;Integrated Security=True";
             string query = "SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'";
 
             using (SqlConnection connection = new SqlConnection(connectionString))

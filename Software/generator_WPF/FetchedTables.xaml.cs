@@ -1,18 +1,5 @@
 ﻿using generator_WPF.Generator_BLL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace generator_WPF
 {
@@ -23,10 +10,12 @@ namespace generator_WPF
     {
         Generator_WPF generator = new Generator_WPF();
         private string _connectionString;
-        public FetchedTables(string connectionString)
+        private string _classNamespace;
+        public FetchedTables(string connectionString, string classNamespace)
         {
             InitializeComponent();
             _connectionString = connectionString;
+            _classNamespace = classNamespace;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -37,11 +26,15 @@ namespace generator_WPF
 
         private void btnChooseTable_Click(object sender, RoutedEventArgs e)
         {
-            if(dgTables.SelectedItem != null)
+            if (dgTables.SelectedItem != null)
             {
-                var selectedTable = dgTables.SelectedItem as TableMetadata;
-                var table = generator.FetchTableMetadata(selectedTable);
-                generator.GenerateClass(table);
+                foreach(var selectedItem in dgTables.SelectedItems)
+                {
+                    var selectedTable = selectedItem as TableMetadata;
+                    var table = generator.FetchTableMetadata(selectedTable);
+                    table.Namespace = _classNamespace;
+                    generator.GenerateClass(table);
+                }
             }
         }
     }

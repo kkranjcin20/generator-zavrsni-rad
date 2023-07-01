@@ -39,9 +39,14 @@ namespace generator_WPF
 
         private void btnFetchMetadata_Click(object sender, RoutedEventArgs e)
         {
-            if(txtConnectionString.Text.Length != 0 && txtNamespace.Text.Length != 0)
+            if (txtConnectionString.Text.Length != 0 && txtNamespace.Text.Length != 0)
             {
-                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text);
+                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text, txtNamespace.Text);
+                fetchedTables.Closed += (s, args) =>
+                {
+                    txtConnectionString.Text = "";
+                    txtNamespace.Text = "";
+                };
                 fetchedTables.ShowDialog();
             }
             else
