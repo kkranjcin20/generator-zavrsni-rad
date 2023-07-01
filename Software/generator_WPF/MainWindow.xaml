@@ -9,9 +9,10 @@
     <Grid>
         <Label Content="Enter class data manually or insert connection string for database" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"></Label>
 
-        <Label Content="Connection String: " HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top"></Label>
-        <TextBox x:Name="txtConnectionString" HorizontalAlignment="Left" Margin="126,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" Height="40"></TextBox>
-        <Button x:Name="btnFetchMetadata" Content="Fetch Metadata"  HorizontalAlignment="Left" Margin="440,69,0,0" VerticalAlignment="Top" Width="100" Click="btnFetchMetadata_Click"></Button>
+        <Label Content="*For generating code from database connection string, &#xD;&#xA;add the name for namespace in the textbox bellow." HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" FontSize="10" FontStyle="Italic" Height="40" IsEnabled="False"></Label>
+        <Label Content="Connection String: " HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top"></Label>
+        <TextBox x:Name="txtConnectionString" HorizontalAlignment="Left" Margin="126,86,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290" Height="40"></TextBox>
+        <Button x:Name="btnFetchMetadata" Content="Fetch Metadata"  HorizontalAlignment="Left" Margin="440,96,0,0" VerticalAlignment="Top" Width="100" Click="btnFetchMetadata_Click"></Button>
 
         <Label Content="Namespace: " HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top"></Label>
         <TextBox x:Name="txtNamespace" HorizontalAlignment="Left" Margin="126,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Height="22"></TextBox>
@@ -25,6 +26,7 @@
         <ComboBox x:Name="cmbAccessModifier" HorizontalAlignment="Left" Margin="470,220,0,0" VerticalAlignment="Top" Width="140" Height="22"></ComboBox>
         <Label Content="# of Added Properties: " HorizontalAlignment="Left" Margin="10,267,0,0" VerticalAlignment="Top"></Label>
         <TextBox x:Name="txtAddedProperties" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="20" IsEnabled="False" Margin="148,270,0,0"/>
+        <Label Content="*To add multiple classes for generating, &#xD;&#xA;add all properties for one class then click Add Class button &#xA;and start adding properties for the other class." HorizontalAlignment="Left" Margin="10,298,0,0" VerticalAlignment="Top" FontSize="10" FontStyle="Italic" Height="50" IsEnabled="False"></Label>
 
         <Button x:Name="btnAddProperty" Content="Add Property"  HorizontalAlignment="Left" Margin="230,270,0,0" VerticalAlignment="Top" Click="btnAddProperty_Click" Width="80"></Button>
         <Button x:Name="btnAddClass" Content="Add Class"  HorizontalAlignment="Left" Margin="540,270,0,0" VerticalAlignment="Top" Width="70" Click="btnAddClass_Click"></Button>
