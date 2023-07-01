@@ -29,6 +29,11 @@ namespace generator_WPF
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            SetupComboboxes();
+        }
+
+        private void SetupComboboxes()
+        {
             cmbAccessModifier.Items.Add("Public");
             cmbAccessModifier.Items.Add("Private");
             cmbAccessModifier.Items.Add("Protected");
@@ -48,13 +53,20 @@ namespace generator_WPF
         {
             if(txtConnectionString.Text.Length != 0 && txtNamespace.Text.Length != 0)
             {
-                FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text, txtNamespace.Text);
-                fetchedTables.Closed += (s, args) =>
+                if(!Regex.IsMatch(txtNamespace.Text, @"^\d"))
                 {
-                    txtConnectionString.Text = "";
-                    txtNamespace.Text = "";
-                };
-                fetchedTables.ShowDialog();
+                    FetchedTables fetchedTables = new FetchedTables(txtConnectionString.Text, txtNamespace.Text);
+                    fetchedTables.Closed += (s, args) =>
+                    {
+                        txtConnectionString.Text = "";
+                        txtNamespace.Text = "";
+                    };
+                    fetchedTables.ShowDialog();
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Namespace can not start with a digit!", "Invalid Names", (MessageBoxButton)System.Windows.Forms.MessageBoxButtons.OK, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Error);
+                }
             }
             else
             {
