@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" ?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="Generator_Extension.3c7659fa-fecb-4683-bd50-c992786c1b74" Version="1.7.1" Language="en-US" Publisher="Karlo Kranjčina" />
+        <Identity Id="Generator_Extension.3c7659fa-fecb-4683-bd50-c992786c1b74" Version="1.7.2" Language="en-US" Publisher="Karlo Kranjčina" />
         <DisplayName>Generate C# Classes from Database</DisplayName>
         <Description xml:space="preserve">Extension for generating C# classes from database tables.</Description>
         <Icon>Resources\Icon.png</Icon>
