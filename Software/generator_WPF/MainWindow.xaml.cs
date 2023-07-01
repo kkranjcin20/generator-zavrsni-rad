@@ -18,7 +18,7 @@ namespace generator_WPF
     {	        
         List<TableMetadata> classes = new List<TableMetadata>();
         List<ColumnMetadata> columns = new List<ColumnMetadata>();
-        TableMetadata currentClass = new TableMetadata();
+        TableMetadata currentClass;
         Generator_WPF generator = new Generator_WPF();
         int addedProperties = 0;
         bool firstTime = true;
@@ -75,6 +75,7 @@ namespace generator_WPF
                     {
                         if (firstTime)
                         {
+                            currentClass = new TableMetadata();
                             currentClass.Name = txtClassName.Text;
                             currentClass.Namespace = txtNamespace.Text;
                         }
