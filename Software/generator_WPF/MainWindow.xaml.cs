@@ -19,7 +19,7 @@ namespace generator_WPF
         List<TableMetadata> classes = new List<TableMetadata>();
         List<ColumnMetadata> columns = new List<ColumnMetadata>();
         TableMetadata currentClass;
-        Generator_WPF generator = new Generator_WPF();
+        Generator generator = new Generator();
         int addedProperties = 0;
         bool firstTime = true;
 

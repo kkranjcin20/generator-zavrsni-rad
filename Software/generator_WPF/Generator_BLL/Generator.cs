@@ -14,7 +14,7 @@ using System.Xml.Linq;
 
 namespace generator_WPF.Generator_BLL
 {
-    public class Generator_WPF
+    public class Generator
     {
         private string _connectionString;
         public List<TableMetadata> FetchTables(string connectionString)

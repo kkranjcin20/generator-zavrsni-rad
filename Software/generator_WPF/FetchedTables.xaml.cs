@@ -8,7 +8,7 @@ namespace generator_WPF
     /// </summary>
     public partial class FetchedTables : Window
     {
-        Generator_WPF generator = new Generator_WPF();
+        Generator generator = new Generator();
         private string _connectionString;
         private string _classNamespace;
         public FetchedTables(string connectionString, string classNamespace)

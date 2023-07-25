@@ -92,9 +92,9 @@
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\generator_WPF\generator_WPF.csproj">
+    <ProjectReference Include="..\generator_WPF\Generator.csproj">
       <Project>{778e6310-ecd0-4dcc-bbdc-490fdb184e86}</Project>
-      <Name>generator_WPF</Name>
+      <Name>Generator</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
