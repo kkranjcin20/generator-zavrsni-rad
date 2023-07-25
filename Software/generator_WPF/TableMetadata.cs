@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace generator_WPF
+namespace generator
 {
     public class TableMetadata
     {

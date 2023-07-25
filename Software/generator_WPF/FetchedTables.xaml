@@ -1,9 +1,9 @@
-﻿<Window x:Class="generator_WPF.FetchedTables"
+﻿<Window x:Class="generator.FetchedTables"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:generator_WPF"
+        xmlns:local="clr-namespace:generator"
         mc:Ignorable="d"
         Title="Fetched Tables" Height="450" Width="600" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Grid>

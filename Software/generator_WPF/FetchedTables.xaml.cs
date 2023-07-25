@@ -1,7 +1,7 @@
-﻿using generator_WPF.Generator_BLL;
+﻿using generator.Generator_BLL;
 using System.Windows;
 
-namespace generator_WPF
+namespace generator
 {
     /// <summary>
     /// Interaction logic for FetchedTables.xaml

@@ -12,7 +12,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace generator_WPF.Generator_BLL
+namespace generator.Generator_BLL
 {
     public class Generator
     {
