@@ -1,4 +1,6 @@
 ﻿using generator.Generator_BLL;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace generator
@@ -8,6 +10,7 @@ namespace generator
     /// </summary>
     public partial class FetchedTables : Window
     {
+        DatabaseMetadataFetcher metadataFetcher = new DatabaseMetadataFetcher();
         Generator generator = new Generator();
         private string _connectionString;
         private string _classNamespace;
@@ -20,8 +23,10 @@ namespace generator
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var tables = generator.FetchTables(_connectionString);
+            var tables = metadataFetcher.FetchTables(_connectionString);
             dgTables.ItemsSource = tables;
+            dgTables.Columns[1].Visibility = Visibility.Hidden;
+            dgTables.Columns[2].Visibility = Visibility.Hidden;
         }
 
         private void btnChooseTable_Click(object sender, RoutedEventArgs e)
@@ -31,9 +36,8 @@ namespace generator
                 foreach(var selectedItem in dgTables.SelectedItems)
                 {
                     var selectedTable = selectedItem as TableMetadata;
-                    var table = generator.FetchTableMetadata(selectedTable);
-                    table.Namespace = _classNamespace;
-                    generator.GenerateClass(table);
+                    selectedTable.Namespace = _classNamespace;
+                    generator.GenerateClass(selectedTable);
                 }
             }
         }

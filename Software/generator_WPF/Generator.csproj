@@ -241,6 +241,7 @@
       <DependentUpon>FetchedTables.xaml</DependentUpon>
     </Compile>
     <Compile Include="Generator_BLL\Generator.cs" />
+    <Compile Include="Generator_BLL\DatabaseMetadataFetcher.cs" />
     <Compile Include="TableMetadata.cs" />
     <Page Include="FetchedTables.xaml">
       <SubType>Designer</SubType>
