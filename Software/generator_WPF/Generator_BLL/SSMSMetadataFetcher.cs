@@ -22,7 +22,7 @@ namespace generator.Generator_BLL
         ColumnMetadata column;
         SqlCommand command;
         SqlDataReader reader;
-        SSMSDataTypeMapper dataTypeMapper;
+        SSMSDataTypeMapper dataTypeMapper = new SSMSDataTypeMapper();
 
         public List<TableMetadata> FetchTables(string connectionString)
         {

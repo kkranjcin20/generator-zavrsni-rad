@@ -240,6 +240,7 @@
     <Compile Include="FetchedTables.xaml.cs">
       <DependentUpon>FetchedTables.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Generator_BLL\FileCreation.cs" />
     <Compile Include="Generator_BLL\Generator.cs" />
     <Compile Include="Generator_BLL\IDatabaseDataTypeMapper.cs" />
     <Compile Include="Generator_BLL\SSMSDataTypeMapper.cs" />
