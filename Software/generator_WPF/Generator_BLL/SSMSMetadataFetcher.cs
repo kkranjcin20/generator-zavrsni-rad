@@ -22,6 +22,7 @@ namespace generator.Generator_BLL
         ColumnMetadata column;
         SqlCommand command;
         SqlDataReader reader;
+        SSMSDataTypeMapper dataTypeMapper;
 
         public List<TableMetadata> FetchTables(string connectionString)
         {
@@ -60,18 +61,16 @@ namespace generator.Generator_BLL
             {
                 column = new ColumnMetadata();
                 column.Name = reader["COLUMN_NAME"].ToString();
-                if (reader["DATA_TYPE"].ToString() == "varchar")
+
+                column.DataType = dataTypeMapper.MapDatabaseDataTypeToCSharpType(reader["DATA_TYPE"].ToString());
+
+                /*
+                if(column.DataType == "")
                 {
-                    column.DataType = "string";
+                    throw new Exception("Unknown data type");
                 }
-                else if (reader["DATA_TYPE"].ToString() == "date")
-                {
-                    column.DataType = "DateTime";
-                }
-                else
-                {
-                    column.DataType = reader["DATA_TYPE"].ToString();
-                }
+                */
+
                 table.Columns.Add(column);
             }
             reader.Close();

@@ -241,6 +241,8 @@
       <DependentUpon>FetchedTables.xaml</DependentUpon>
     </Compile>
     <Compile Include="Generator_BLL\Generator.cs" />
+    <Compile Include="Generator_BLL\IDatabaseDataTypeMapper.cs" />
+    <Compile Include="Generator_BLL\SSMSDataTypeMapper.cs" />
     <Compile Include="Generator_BLL\SSMSMetadataFetcher.cs" />
     <Compile Include="Generator_BLL\IDatabaseMetadataFetcher.cs" />
     <Compile Include="TableMetadata.cs" />
