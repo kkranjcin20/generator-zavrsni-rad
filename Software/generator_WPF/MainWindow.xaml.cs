@@ -19,7 +19,7 @@ namespace generator
         List<TableMetadata> classes = new List<TableMetadata>();
         List<ColumnMetadata> columns = new List<ColumnMetadata>();
         TableMetadata currentClass;
-        DatabaseMetadataFetcher metadataFetcher = new DatabaseMetadataFetcher();
+        SSMSMetadataFetcher metadataFetcher = new SSMSMetadataFetcher();
         Generator generator = new Generator();
         int addedProperties = 0;
         bool firstTime = true;

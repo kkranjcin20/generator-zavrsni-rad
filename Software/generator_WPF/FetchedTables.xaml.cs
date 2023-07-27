@@ -10,7 +10,7 @@ namespace generator
     /// </summary>
     public partial class FetchedTables : Window
     {
-        DatabaseMetadataFetcher metadataFetcher = new DatabaseMetadataFetcher();
+        SSMSMetadataFetcher metadataFetcher = new SSMSMetadataFetcher();
         Generator generator = new Generator();
         private string _connectionString;
         private string _classNamespace;

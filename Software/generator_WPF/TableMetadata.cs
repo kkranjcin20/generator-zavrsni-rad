@@ -15,8 +15,8 @@ namespace generator
 
     public class ColumnMetadata
     {
+        public string Name { get; set; }
         public string AccessModifier { get; set; }
         public string DataType { get; set; }
-        public string Name { get; set; }
     }
 }

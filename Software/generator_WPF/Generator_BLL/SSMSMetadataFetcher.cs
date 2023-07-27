@@ -16,7 +16,7 @@ using System.Xml.Linq;
 
 namespace generator.Generator_BLL
 {
-    public class DatabaseMetadataFetcher
+    public class SSMSMetadataFetcher : IDatabaseMetadataFetcher
     {
         List<TableMetadata> tables = new List<TableMetadata>();
         ColumnMetadata column;
