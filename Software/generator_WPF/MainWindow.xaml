@@ -28,9 +28,9 @@
         <TextBox x:Name="txtAddedProperties" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="20" IsEnabled="False" Margin="148,270,0,0"/>
         <Label Content="*To add multiple classes for generating, &#xD;&#xA;add all properties for one class then click Add Class button &#xA;and start adding properties for the other class." HorizontalAlignment="Left" Margin="10,298,0,0" VerticalAlignment="Top" FontSize="10" FontStyle="Italic" Height="50" IsEnabled="False"></Label>
 
-        <Button x:Name="btnAddProperty" Content="Add Property"  HorizontalAlignment="Left" Margin="230,270,0,0" VerticalAlignment="Top" Click="btnAddProperty_Click" Width="80"></Button>
-        <Button x:Name="btnAddClass" Content="Add Class"  HorizontalAlignment="Left" Margin="540,270,0,0" VerticalAlignment="Top" Width="70" Click="btnAddClass_Click"></Button>
-        <Button x:Name="btnGenerate" Content="Generate"  HorizontalAlignment="Left" Margin="501,335,0,0" VerticalAlignment="Top" Click="btnGenerate_Click" Width="55"></Button>
-        <Button x:Name="btnCancel" Content="Cancel"  HorizontalAlignment="Left" Margin="561,335,0,0" VerticalAlignment="Top" Click="btnCancel_Click" Width="49"></Button>
+        <Button x:Name="btnAddProperty" Content="Add Property" HorizontalAlignment="Left" Margin="230,270,0,0" VerticalAlignment="Top" Click="btnAddProperty_Click" Width="80"></Button>
+        <Button x:Name="btnAddClass" Content="Add Class" HorizontalAlignment="Left" Margin="540,270,0,0" VerticalAlignment="Top" Width="70" Click="btnAddClass_Click"></Button>
+        <Button x:Name="btnGenerate" Content="Generate" HorizontalAlignment="Left" Margin="501,335,0,0" VerticalAlignment="Top" Click="btnGenerate_Click" Width="55"></Button>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="561,335,0,0" VerticalAlignment="Top" Click="btnCancel_Click" Width="49"></Button>
     </Grid>
 </Window>

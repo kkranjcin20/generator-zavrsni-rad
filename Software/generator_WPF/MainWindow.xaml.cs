@@ -1,4 +1,5 @@
-﻿using generator.Generator_BLL;
+﻿using EnvDTE;
+using generator.Generator_BLL;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.Win32;
@@ -19,8 +20,8 @@ namespace generator
         List<TableMetadata> classes = new List<TableMetadata>();
         List<ColumnMetadata> columns = new List<ColumnMetadata>();
         TableMetadata currentClass;
-        SSMSMetadataFetcher metadataFetcher = new SSMSMetadataFetcher();
         Generator generator = new Generator();
+        SSMSDataTypeMapper dataTypeMapper = new SSMSDataTypeMapper();
         int addedProperties = 0;
         bool firstTime = true;
 
@@ -93,11 +94,10 @@ namespace generator
                             currentClass.Namespace = txtNamespace.Text;
                         }
 
-                        string dataType = GetDataType();
                         ColumnMetadata column = new ColumnMetadata
                         {
                             Name = txtPropertyName.Text,
-                            DataType = dataType,
+                            DataType = dataTypeMapper.MapDatabaseDataTypeToCSharpType(cmbDataType.SelectedItem.ToString()),
                             AccessModifier = cmbAccessModifier.SelectedItem.ToString()
                         };
                         columns.Add(column);
@@ -123,38 +123,6 @@ namespace generator
             {
                 System.Windows.Forms.MessageBox.Show("Insert all attributes!");
             }
-        }
-
-        private string GetDataType()
-        {
-            string dataType = "";
-            string selectedItem = cmbDataType.SelectedItem.ToString();
-
-            switch (selectedItem)
-            {
-                case "Integer":
-                    dataType = "int";
-                    break;
-                case "Float":
-                    dataType = "float";
-                    break;
-                case "Double":
-                    dataType = "double";
-                    break;
-                case "String":
-                    dataType = "string";
-                    break;
-                case "Character":
-                    dataType = "char";
-                    break;
-                case "Bool":
-                    dataType = "bool";
-                    break;
-                case "DateTime":
-                    dataType = "DateTime";
-                    break;
-            }
-            return dataType;
         }
 
         private void btnAddClass_Click(object sender, RoutedEventArgs e)
@@ -186,10 +154,19 @@ namespace generator
         {
             if (classes.Count != 0)
             {
+                List<string> classNames = new List<string>();
+                List<string> generatedClassCodes = new List<string>();
                 foreach (var classToGenerate in classes)
                 {
-                    generator.GenerateClass(classToGenerate);
+                    generatedClassCodes.Add(generator.GenerateClass(classToGenerate));
+                    classNames.Add(classToGenerate.Name);
                 }
+                SaveClassWindow saveClassWindow = new SaveClassWindow(classNames, generatedClassCodes);
+                saveClassWindow.ShowDialog();
+                classes.Clear();
+                columns.Clear();
+                classNames.Clear();
+                generatedClassCodes.Clear();
             }
             else
             {

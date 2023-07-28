@@ -1,24 +1,15 @@
-﻿using Microsoft.Build.Evaluation;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace generator.Generator_BLL
 {
     public class Generator
     {
-        public void GenerateClass(TableMetadata classToGenerate)
+        public string GenerateClass(TableMetadata classToGenerate)
         {
-            string filePath = Path.GetTempFileName() + ".cs";
             string formattedClassName = Regex.Replace(classToGenerate.Name, @"\s", "_");
             string formattedNamespace = Regex.Replace(classToGenerate.Namespace, @"\s", "_");
 
@@ -40,8 +31,7 @@ namespace generator.Generator_BLL
             var compilationUnit = SyntaxFactory.CompilationUnit().AddUsings(generatedUsingDirective).AddMembers(generatedNamespace);
             string generatedCode = compilationUnit.NormalizeWhitespace().ToFullString();
 
-            FileCreation file = new FileCreation();
-            file.CreateFile(filePath, generatedCode);
+            return generatedCode;
         }
 
         private UsingDirectiveSyntax GenerateUsingDirective()

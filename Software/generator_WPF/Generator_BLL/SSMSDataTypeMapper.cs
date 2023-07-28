@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace generator.Generator_BLL
+﻿namespace generator.Generator_BLL
 {
     public class SSMSDataTypeMapper : IDatabaseDataTypeMapper
     {
@@ -19,13 +12,16 @@ namespace generator.Generator_BLL
                 case "varbinary":
                     return "byte[]";
                 case "bit":
+                case "bool":
                     return "bool";
                 case "char":
+                case "character":
                 case "nchar":
                 case "text":
                 case "ntext":
                 case "varchar":
                 case "nvarchar":
+                case "string":
                     return "string";
                 case "date":
                 case "datetime":
@@ -37,6 +33,7 @@ namespace generator.Generator_BLL
                 case "float":
                     return "float";
                 case "int":
+                case "integer":
                     return "int";
                 case "real":
                     return "float";

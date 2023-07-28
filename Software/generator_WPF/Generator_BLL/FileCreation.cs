@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows;
+using System.Security.AccessControl;
 
 namespace generator.Generator_BLL
 {
@@ -27,8 +24,6 @@ namespace generator.Generator_BLL
             {
                 System.Windows.MessageBox.Show("Error creating file: " + ex.Message, "File Creation", (MessageBoxButton)MessageBoxButtons.OK, (MessageBoxImage)MessageBoxIcon.Error);
             }
-
-            System.Diagnostics.Process.Start("notepad.exe", filePath);
         }
     }
 }

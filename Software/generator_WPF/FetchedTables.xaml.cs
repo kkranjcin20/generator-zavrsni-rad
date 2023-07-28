@@ -33,12 +33,17 @@ namespace generator
         {
             if (dgTables.SelectedItem != null)
             {
-                foreach(var selectedItem in dgTables.SelectedItems)
+                List<string> classNames = new List<string>();
+                List<string> generatedClassCodes = new List<string>();
+                foreach (var selectedItem in dgTables.SelectedItems)
                 {
                     var selectedTable = selectedItem as TableMetadata;
                     selectedTable.Namespace = _classNamespace;
-                    generator.GenerateClass(selectedTable);
+                    generatedClassCodes.Add(generator.GenerateClass(selectedTable));
+                    classNames.Add(selectedTable.Name);
                 }
+                SaveClassWindow saveClassWindow = new SaveClassWindow(classNames, generatedClassCodes);
+                saveClassWindow.ShowDialog();
             }
         }
     }
