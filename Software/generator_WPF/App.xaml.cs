@@ -1,5 +1,4 @@
-﻿using Microsoft.Build.Locator;
-using System.Windows;
+﻿using System.Windows;
 
 namespace generator
 {

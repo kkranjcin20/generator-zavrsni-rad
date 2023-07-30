@@ -81,7 +81,7 @@ namespace generator
             if (txtClassName.Text.Length != 0 && txtPropertyName.Text.Length != 0 && txtNamespace.Text.Length != 0)
             {
                 bool isInvalidNamespaceName = Regex.IsMatch(txtNamespace.Text, @"^\d");
-                bool isInvalidClassName = Regex.IsMatch(txtClassName.Text, @"^\d");
+                bool isInvalidClassName = !char.IsUpper(txtClassName.Text, 0) || Regex.IsMatch(txtClassName.Text, @"^\d");
                 bool isInvalidPropertyName = Regex.IsMatch(txtPropertyName.Text, @"^\d");
                 if (!isInvalidNamespaceName && !isInvalidClassName && !isInvalidPropertyName)
                 {
@@ -116,7 +116,7 @@ namespace generator
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("Namespace, Class and Property names can not start with a digit!", "Invalid Names", (MessageBoxButton)System.Windows.Forms.MessageBoxButtons.OK, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Error);
+                    System.Windows.MessageBox.Show("Namespace, Class and Property names can not start with a digit!\nClass name must start with the upper case letter!", "Invalid Names", (MessageBoxButton)System.Windows.Forms.MessageBoxButtons.OK, (MessageBoxImage)System.Windows.Forms.MessageBoxIcon.Error);
                 }
             }
             else

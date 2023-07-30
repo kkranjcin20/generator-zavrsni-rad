@@ -14,6 +14,7 @@ namespace generator
         Generator generator = new Generator();
         private string _connectionString;
         private string _classNamespace;
+
         public FetchedTables(string connectionString, string classNamespace)
         {
             InitializeComponent();

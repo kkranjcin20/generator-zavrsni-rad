@@ -32,9 +32,14 @@ namespace generator
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            if (i == 0)
+            {
+                classSaver.SetupProject(txtPath.Text);
+                btnChangeProject.IsEnabled = false;
+            }
             if (txtPath.Text != "")
             {
-                classSaver.SaveClass(_classNames[i], txtPath.Text, _generatedClassCodes[i]);
+                classSaver.SaveClass(_classNames[i], _generatedClassCodes[i]);
                 i++;
                 if(_classNames.Count != i)
                 {
@@ -42,6 +47,7 @@ namespace generator
                 }
                 else
                 {
+                    classSaver.SaveAndUnloadProject();
                     Close();
                 }
             }
@@ -50,7 +56,20 @@ namespace generator
                 System.Windows.Forms.MessageBox.Show("Invalid path!\nPress the button 'Change Project' and choose a valid path.");
             }
         }
-
+        private void btnSaveAllClasses_Click(object sender, RoutedEventArgs e)
+        {
+            if (i == 0)
+            {
+                classSaver.SetupProject(txtPath.Text);
+            }
+            for (; i < _classNames.Count; i++)
+            {
+                classSaver.SaveClass(_classNames[i], _generatedClassCodes[i]);
+            }
+            classSaver.SaveAndUnloadProject();
+            Close();
+        }
+        
         private void btnChangeProject_Click(object sender, RoutedEventArgs e)
         {
             string filePath = Path.GetDirectoryName(txtPath.Text);
@@ -60,7 +79,7 @@ namespace generator
                 txtPath.Text = projectPath;
             }
         }
-
+        
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             Close();
