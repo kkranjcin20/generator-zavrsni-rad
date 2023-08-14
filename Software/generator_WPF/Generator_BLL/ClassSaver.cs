@@ -1,5 +1,4 @@
 ﻿using Microsoft.Build.Evaluation;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
 using System.Windows.Forms;

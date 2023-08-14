@@ -252,8 +252,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FetchedTables.xaml.cs">
-      <DependentUpon>FetchedTables.xaml</DependentUpon>
+    <Compile Include="FetchedTablesWindow.xaml.cs">
+      <DependentUpon>FetchedTablesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Generator_BLL\ClassSaver.cs" />
     <Compile Include="Generator_BLL\FileCreation.cs" />
@@ -266,7 +266,7 @@
       <DependentUpon>SaveClassWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TableMetadata.cs" />
-    <Page Include="FetchedTables.xaml">
+    <Page Include="FetchedTablesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
