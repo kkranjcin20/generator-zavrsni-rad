@@ -16,6 +16,7 @@
                     return "bool";
                 case "char":
                 case "character":
+                    return "char";
                 case "nchar":
                 case "text":
                 case "ntext":
@@ -32,6 +33,8 @@
                     return "decimal";
                 case "float":
                     return "float";
+                case "double":
+                    return "double";
                 case "int":
                 case "integer":
                     return "int";

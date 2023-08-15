@@ -6,7 +6,7 @@ using System.Security.AccessControl;
 
 namespace generator.Generator_BLL
 {
-    public class FileCreation
+    public class FileManager
     {
         public void CreateFile(string filePath, string generatedCode)
         {

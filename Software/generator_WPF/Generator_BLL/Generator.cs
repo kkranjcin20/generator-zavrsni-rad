@@ -13,8 +13,8 @@ namespace generator.Generator_BLL
             string formattedClassName = Regex.Replace(classToGenerate.Name, @"\s", "_");
             string formattedNamespace = Regex.Replace(classToGenerate.Namespace, @"\s", "_");
 
-            UsingDirectiveSyntax generatedUsingDirective = GenerateUsingDirective();
-            ClassDeclarationSyntax generatedClass = GenerateClass(formattedClassName);
+            UsingDirectiveSyntax generatedUsingDirective = GenerateUsingDirectiveCode();
+            ClassDeclarationSyntax generatedClass = GenerateClassCode(formattedClassName);
             PropertyDeclarationSyntax property;
 
             foreach (ColumnMetadata column in classToGenerate.Columns)
@@ -23,34 +23,34 @@ namespace generator.Generator_BLL
 
                 string formattedDataType = Regex.Replace(column.DataType, @"\s", "_");
                 string formattedColumnName = Regex.Replace(column.Name, @"\s", "_");
-                property = GenerateProperty(modifiers, formattedDataType, formattedColumnName);
+                property = GeneratePropertyCode(modifiers, formattedDataType, formattedColumnName);
                 generatedClass = generatedClass.AddMembers(property);
             }
 
-            NamespaceDeclarationSyntax generatedNamespace = GenerateNamespace(formattedNamespace, generatedClass);
+            NamespaceDeclarationSyntax generatedNamespace = GenerateNamespaceCode(formattedNamespace, generatedClass);
             var compilationUnit = SyntaxFactory.CompilationUnit().AddUsings(generatedUsingDirective).AddMembers(generatedNamespace);
             string generatedCode = compilationUnit.NormalizeWhitespace().ToFullString();
 
             return generatedCode;
         }
 
-        private UsingDirectiveSyntax GenerateUsingDirective()
+        private UsingDirectiveSyntax GenerateUsingDirectiveCode()
         {
             return SyntaxFactory.UsingDirective(SyntaxFactory.ParseName("System"));
         }
 
-        private NamespaceDeclarationSyntax GenerateNamespace(string formattedNamespace, ClassDeclarationSyntax generatedClass)
+        private NamespaceDeclarationSyntax GenerateNamespaceCode(string formattedNamespace, ClassDeclarationSyntax generatedClass)
         {
             return SyntaxFactory.NamespaceDeclaration(SyntaxFactory.ParseName(formattedNamespace))
                                 .AddMembers(generatedClass);
         }
 
-        private ClassDeclarationSyntax GenerateClass(string formattedClassName)
+        private ClassDeclarationSyntax GenerateClassCode(string formattedClassName)
         {
             return SyntaxFactory.ClassDeclaration(formattedClassName);
         }
 
-        private PropertyDeclarationSyntax GenerateProperty(SyntaxTokenList modifiers, string formattedDataType, string formattedColumnName)
+        private PropertyDeclarationSyntax GeneratePropertyCode(SyntaxTokenList modifiers, string formattedDataType, string formattedColumnName)
         {
             return SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName(formattedDataType), formattedColumnName)
                                 .WithModifiers(modifiers)

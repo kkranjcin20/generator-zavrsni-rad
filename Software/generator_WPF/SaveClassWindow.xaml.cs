@@ -14,6 +14,8 @@ namespace generator
         ClassSaver classSaver = new ClassSaver();
         private List<string> _classNames;
         private List<string> _generatedClassCodes;
+        string _projectPath;
+
         int i = 0;
 
         public SaveClassWindow(List<string> classNames, List<string> generatedClassCodes)
@@ -25,8 +27,15 @@ namespace generator
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string projectPath = classSaver.GetProjectPath("");
-            txtPath.Text = projectPath;
+            if(_projectPath == "")
+            {
+                _projectPath = classSaver.GetProjectPath("");
+            }
+            else
+            {
+                _projectPath = classSaver.GetProjectPath(_projectPath);
+            }
+            txtPath.Text = _projectPath;
             txtClassName.Text = _classNames.First();
         }
 

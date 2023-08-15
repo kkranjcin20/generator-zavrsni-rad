@@ -1,6 +1,7 @@
 ﻿using Microsoft.Build.Evaluation;
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace generator.Generator_BLL
@@ -8,7 +9,7 @@ namespace generator.Generator_BLL
     public class ClassSaver
     {
         Project project;
-        FileCreation fileCreation;
+        FileManager fileManager;
         string projectDirectory;
 
         public string GetProjectPath(string filePath)
@@ -52,7 +53,7 @@ namespace generator.Generator_BLL
         public void SetupProject(string projectPath)
         {
             project = new Project(projectPath);
-            fileCreation = new FileCreation();
+            fileManager = new FileManager();
             projectDirectory = Path.GetDirectoryName(projectPath);
         }
 
@@ -67,9 +68,15 @@ namespace generator.Generator_BLL
             className += ".cs";
             string filePath = Path.Combine(projectDirectory, className);
 
-            fileCreation.CreateFile(filePath, generatedCode);
+            fileManager.CreateFile(filePath, generatedCode);
 
-            project.AddItem("Compile", className);
+            ProjectItem existingItem = project.GetItems("Compile")
+                                      .FirstOrDefault(item => item.EvaluatedInclude.Equals(className, StringComparison.OrdinalIgnoreCase));
+
+            if (existingItem == null)
+            {
+                project.AddItem("Compile", className);
+            }
         }
     }
 }

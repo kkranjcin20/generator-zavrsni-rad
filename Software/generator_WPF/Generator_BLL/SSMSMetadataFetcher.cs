@@ -39,7 +39,7 @@ namespace generator.Generator_BLL
             return tables;
         }
 
-        public void FetchColumns(TableMetadata table)
+        private void FetchColumns(TableMetadata table)
         {
             command.CommandText = $"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table.Name}'";
             reader = command.ExecuteReader();
@@ -50,13 +50,6 @@ namespace generator.Generator_BLL
                 column.Name = reader["COLUMN_NAME"].ToString();
 
                 column.DataType = dataTypeMapper.MapDatabaseDataTypeToCSharpType(reader["DATA_TYPE"].ToString());
-
-                /*
-                if(column.DataType == "")
-                {
-                    throw new Exception("Unknown data type");
-                }
-                */
 
                 table.Columns.Add(column);
             }
